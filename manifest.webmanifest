@@ -1,0 +1,14 @@
+{
+  "name": "Examen AI",
+  "short_name": "Examen",
+  "description": "A private companion for examining your conscience, preparing a good confession, and praying a nightly examen. Everything stays on your device.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f4f1",
+  "theme_color": "#6f5ad6",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

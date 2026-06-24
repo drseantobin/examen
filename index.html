@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Examen AI — examine your conscience, in private</title>
+  <meta name="description" content="A quiet, fully private companion for examining your conscience, preparing a good confession, and praying a nightly examen. Everything stays on your device." />
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#6f5ad6" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#15141a" media="(prefers-color-scheme: dark)" />
+
+  <!-- Apply a saved Appearance preference before first paint so an explicit
+       choice never flashes the wrong theme. Absent → follow the OS. -->
+  <script>try{var t=localStorage.getItem('examen_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Examen AI" />
+</head>
+<body>
+  <a class="skip-link" href="#app">Skip to content</a>
+
+  <main id="app" role="main" tabindex="-1">
+    <!-- Rendered by app.js -->
+    <div class="boot">
+      <div class="boot-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6"/><path d="M12 21a6 6 0 0 0 6-6c0-3-2.5-5-6-9-3.5 4-6 6-6 9a6 6 0 0 0 6 6Z"/></svg>
+      </div>
+      <div class="boot-name">Examen AI</div>
+      <div class="boot-tag">a quiet place to examine your heart</div>
+    </div>
+  </main>
+
+  <nav id="tabbar" class="tabbar" aria-label="Primary" hidden>
+    <!-- Rendered by app.js -->
+  </nav>
+
+  <script src="attention-examen.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+      });
+    }
+  </script>
+</body>
+</html>
