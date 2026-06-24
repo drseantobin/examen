@@ -1,6 +1,6 @@
 /* Examen AI service worker — offline-first cache of the app shell.
    Bump CACHE on every deploy so clients pick up new code. */
-const CACHE = 'examen-v2';
+const CACHE = 'examen-v3';
 const ASSETS = [
   './', './index.html', './styles.css', './app.js',
   './manifest.webmanifest', './icon.svg'

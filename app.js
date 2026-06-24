@@ -938,7 +938,31 @@
     }).join('');
   }
 
+  function attnIntroSeen() { return load(K.attn, {}).introSeen === true; }
+  function setAttnIntroSeen() { var d = load(K.attn, {}); d.introSeen = true; save(K.attn, d); }
+
+  // The course opens like a devotional book — a title page, then the preface
+  // ("A Note Before You Begin"), then how-to + the Five Movements, then the days.
+  function renderCourseCover() {
+    var done = attnCompletedCount();
+    app.innerHTML =
+      backbar('Home') +
+      '<div class="stack book-cover center">' +
+        '<div class="bc-eyebrow">A 30-day devotional · interactive</div>' +
+        '<div class="bc-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6"/><path d="M12 21a6 6 0 0 0 6-6c0-3-2.5-5-6-9-3.5 4-6 6-6 9a6 6 0 0 0 6 6Z"/></svg></div>' +
+        '<h1 class="serif bc-title">' + esc(titleCase(AX.meta.title)) + '</h1>' +
+        '<p class="bc-sub">' + esc(AX.meta.subtitle) + '</p>' +
+        '<div class="bc-byline">' + esc(AX.meta.author) + ' · ' + esc(AX.meta.movement) + '</div>' +
+        '<hr class="divider" />' +
+        '<p class="lede">You don’t just read this one — you practice it. Thirty evenings, a few honest minutes each: you watch where your attention actually went, notice who was forming you through it, and gently take it back.</p>' +
+        '<p class="muted">It moves through five small movements you can keep for life. And it remembers where you are, so you can always return.</p>' +
+        '<button class="btn block lg" data-action="begin-course-reading">Open the book</button>' +
+        '<button class="btn quiet block" data-action="skip-course-intro">' + (done > 0 ? 'Skip to the 30 days' : 'Skip the introduction') + '</button>' +
+      '</div>';
+  }
+
   function renderCourse() {
+    if (!attnIntroSeen()) return renderCourseCover();
     var total = AX.days.length;
     var done = attnCompletedCount();
     var cur = attnCurrentDay();
@@ -1040,25 +1064,34 @@
   function renderCourseIntro() {
     app.innerHTML =
       backbar('The Attention Examen') +
-      '<div class="stack reading">' +
-      '<h1 class="serif">' + esc(AX.intro.title) + '</h1>' +
+      '<div class="stack reading book">' +
+      '<div class="bc-eyebrow center">Preface</div>' +
+      '<h1 class="serif center">' + esc(AX.intro.title) + '</h1>' +
       paras(AX.intro.paragraphs) +
-      '<button class="btn block" data-action="open-day" data-day="1">Begin — Day 1</button>' +
+      '<div class="stepbar" style="justify-content:flex-end">' +
+        '<button class="btn" data-action="go" data-view="coursehowto">Continue →</button>' +
+      '</div>' +
       '</div>';
   }
 
   function renderCourseHowTo() {
+    var cur = attnCurrentDay();
     app.innerHTML =
       backbar('The Attention Examen') +
-      '<div class="stack reading">' +
-      '<h1 class="serif">' + esc(AX.howTo.title) + '</h1>' +
+      '<div class="stack reading book">' +
+      '<div class="bc-eyebrow center">How this works</div>' +
+      '<h1 class="serif center">' + esc(AX.howTo.title) + '</h1>' +
       paras(AX.howTo.paragraphs) +
       '<h2 class="serif">The Five Movements</h2>' +
+      '<p class="muted">Every evening moves through the same five steps. Learn them once and you have a practice for life.</p>' +
       AX.movements.map(function (m) {
         return '<div class="card examen-step">' +
           '<div class="es-kicker">' + m.n + '. ' + esc(m.name) + '</div>' +
           '<p style="margin:6px 0 0">' + esc(m.desc) + '</p></div>';
       }).join('') +
+      '<button class="btn block lg" style="margin-top:8px" data-action="open-day" data-day="' + cur + '">' +
+        (cur === 1 ? 'Begin — Day 1' : 'Continue — Day ' + cur) + '</button>' +
+      '<button class="btn quiet block" data-action="go" data-view="course">See all 30 days</button>' +
       '</div>';
   }
 
@@ -1331,7 +1364,10 @@
       return;
     }
     if (action === 'examen-history') return go('examenhistory');
+    if (action === 'begin-course-reading') { setAttnIntroSeen(); return go('courseintro'); }
+    if (action === 'skip-course-intro') { setAttnIntroSeen(); return go('course', { noPush: true }); }
     if (action === 'open-day') {
+      setAttnIntroSeen();
       state.dayNum = parseInt(t.getAttribute('data-day'), 10) || 1;
       return go('courseday');
     }
