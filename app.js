@@ -446,6 +446,17 @@
     }
   ];
 
+  // Prefer the richer, source-reviewed content from examination.js when present.
+  // The arrays above remain as an offline fallback if that file fails to load.
+  if (typeof window !== 'undefined' && window.EXAMINATION_CONTENT) {
+    if (Array.isArray(window.EXAMINATION_CONTENT.sins) && window.EXAMINATION_CONTENT.sins.length) {
+      SINS = window.EXAMINATION_CONTENT.sins;
+    }
+    if (Array.isArray(window.EXAMINATION_CONTENT.commandments) && window.EXAMINATION_CONTENT.commandments.length) {
+      COMMANDMENTS = window.EXAMINATION_CONTENT.commandments;
+    }
+  }
+
   // ---- Acts of Contrition --------------------------------------------------
   var CONTRITION = {
     child: {
@@ -975,18 +986,24 @@
       '<p class="lede">' + esc(AX.meta.subtitle) + '</p>' +
       '<p class="muted small">' + esc(AX.meta.author) + '</p>' +
 
+      // Front matter first — read these before beginning, like the opening of a book.
+      '<div class="bc-eyebrow" style="margin-top:4px">Start here</div>' +
+      '<button class="card-tap" data-action="go" data-view="courseintro">' +
+        '<div class="ct-title">A Note Before You Begin</div>' +
+        '<div class="ct-desc">The preface — why your attention is the faculty by which you love.</div>' +
+      '</button>' +
+      '<button class="card-tap" data-action="go" data-view="coursehowto">' +
+        '<div class="ct-title">How to use it · the Five Movements</div>' +
+        '<div class="ct-desc">The shape of each evening’s practice — learn it once, keep it for life.</div>' +
+      '</button>' +
+
       '<div class="card">' +
         '<div class="row between"><strong>Your progress</strong>' +
           '<span class="muted small">' + done + ' of ' + total + ' days</span></div>' +
         '<div class="progress-rail" style="margin-top:10px"><div class="progress-fill" style="width:' + pct + '%"></div></div>' +
-        '<button class="btn block" style="margin-top:16px" data-action="open-day" data-day="' + cur + '">' +
+        '<button class="btn block lg" style="margin-top:16px" data-action="open-day" data-day="' + cur + '">' +
           (done === 0 ? 'Begin — Day 1' : (done >= total ? 'Revisit the workbook' : 'Continue — Day ' + cur)) +
         '</button>' +
-      '</div>' +
-
-      '<div class="row wrap">' +
-        '<button class="btn ghost small" data-action="go" data-view="courseintro">A Note Before You Begin</button>' +
-        '<button class="btn ghost small" data-action="go" data-view="coursehowto">How to use it · the Five Movements</button>' +
       '</div>' +
 
       (attnUnlocked() ? '' :
@@ -1136,6 +1153,8 @@
         '<textarea class="reflect" data-axnotes="1" style="min-height:130px" placeholder="Write by hand if you can; here if it helps.">' + esc(notesVal) + '</textarea>' +
       '</div>' +
 
+      '<button class="btn block lg" style="margin-top:8px" data-action="reflect-day">Complete today — see your reflection</button>' +
+
       ((n === ATTN_CONFIG.freeDays && !attnUnlocked()) ?
         '<div class="card unlock-cta" style="margin-top:8px">' +
           '<div class="row between"><strong>That’s the free preview</strong><span class="pill amber">' + esc(ATTN_CONFIG.price) + '</span></div>' +
@@ -1149,8 +1168,7 @@
         :
         '<div class="stepbar">' +
           (n > 1 ? '<button class="btn ghost" data-action="day-step" data-dir="-1">Previous day</button>' : '<span></span>') +
-          (n < total ? '<button class="btn" data-action="day-step" data-dir="1">Next day</button>' :
-            '<button class="btn" data-action="go" data-view="course">Finish</button>') +
+          (n < total ? '<button class="btn ghost" data-action="day-step" data-dir="1">Skip ahead →</button>' : '<span></span>') +
         '</div>' +
         '<button class="btn quiet block" data-action="go" data-view="course">All 30 days</button>') +
       '</div>';
@@ -1169,6 +1187,109 @@
       r2.notes = notesTa.value;
       save(K.attn, d2);
     });
+  }
+
+  /* ---- end-of-day reflection (generated ON-DEVICE from the user's own entries) ----
+     This is NOT an LLM call and nothing leaves the device. It reads what the person
+     wrote in the day's five movements + notes, detects attention themes, reflects
+     their own words back, tracks recurring patterns across days, and offers gentle,
+     formation-grounded encouragement. A mirror, not a verdict. */
+  function buildDayReflection(n) {
+    var data = load(K.attn, {});
+    var rec = (data.days && data.days[n]) || { ex: {}, notes: '' };
+    var ex = rec.ex || {};
+    var get = function (i) { return (ex[i] || '').trim(); };
+    var movementNames = ['Stillness', 'Review', 'Recognition', 'Reckoning & Gratitude', 'Resolve'];
+    var resolve = get(4), gratitude = get(3);
+    var all = [get(0), get(1), get(2), get(3), get(4), (rec.notes || '')].join('  \n  ');
+    var low = all.toLowerCase();
+    var answered = [0, 1, 2, 3, 4].filter(function (i) { return get(i); });
+    var blanks = [0, 1, 2, 3, 4].filter(function (i) { return !get(i); });
+    var wordCount = (all.match(/\S+/g) || []).length;
+
+    var THEMES = [
+      { key: 'feed', label: 'the feed', rx: /phone|scroll|feed|instagram|insta|tiktok|tik tok|twitter|reddit|facebook|snapchat|\bsnap|youtube|social media|\bsocial\b|the app|my apps/, note: "You watched your attention slip toward the feed. That noticing is itself the loosening — what you can see, you no longer obey blindly." },
+      { key: 'news', label: 'the news', rx: /\bnews\b|headline|politic|doomscroll|\bdoom\b/, note: "The pull was toward the news — the endless updating that promises control and delivers unease. Tomorrow, catch the moment the worry reaches for the screen." },
+      { key: 'messages', label: 'messages', rx: /email|inbox|\btext\b|texts|message|slack|whatsapp|notification|dm\b/, note: "Messages kept calling you back. Each ping trains a small reflex; you’re beginning to feel the leash — which is how it loosens." },
+      { key: 'restless', label: 'restlessness', rx: /bored|boredom|restless|idle|fidget|nothing to do|antsy|\bbore\b/, note: "What pulled at you looks like restlessness — the old monks’ acedia, the noonday demon. The cure isn’t force; it’s staying one more minute in the discomfort instead of reaching." },
+      { key: 'anxiety', label: 'anxiety', rx: /anxious|anxiety|worry|worried|stress|overwhelm|afraid|\bfear\b|panic|dread/, note: "Underneath the reaching was anxiety, and the screen offered relief but gave static. Tomorrow, try one slow breath before the reach — let the feeling be felt." },
+      { key: 'escape', label: 'the urge to escape', rx: /escape|numb|avoid|distract|procrastinat|zone out|checked out|switch off/, note: "You caught yourself reaching to escape. Attention flees what it can’t yet bear — and grows, quietly, by staying." },
+      { key: 'work', label: 'busyness', rx: /\bwork\b|busy|deadline|\btask|productiv|meetings?/, note: "The day’s busyness fragmented you. Not all of it was yours to carry — some attention you simply spent because the work asked, and forgot you could choose." }
+    ];
+    var hits = THEMES.filter(function (t) { return t.rx.test(low); });
+    var paras = [];
+
+    var prevTouched = n > 1 ? attnDayTouched(n - 1) : true;
+    if (n === 1) paras.push("You took the first honest look — and the first is the hardest. You didn’t try to fix anything; you just watched. That is exactly right.");
+    else if (!prevTouched) paras.push("You came back. In a practice built on returning, that matters more than any unbroken streak. A saint is not someone who never wandered, but someone who returned one more time than they left.");
+    else paras.push("Day " + n + " done. You’re staying with it — and staying is the whole of it.");
+
+    if (hits.length) {
+      paras.push(hits[0].note);
+      if (hits[1]) paras.push("There was also " + hits[1].label + " in what you wrote. Two pulls in one day isn’t failure — it’s a clearer map of where your attention actually lives.");
+    } else if (answered.length) {
+      paras.push("You looked honestly at where your attention went today. You don’t need a dramatic finding — the watching itself is changing you.");
+    }
+
+    if (gratitude) {
+      var snip = gratitude.length > 150 ? gratitude.slice(0, 147).trim() + "…" : gratitude;
+      paras.push("And you named where grace broke through: “" + snip + "” Hold onto that. Attention given in love is the most human thing you do — and the one thing the feed can never give back.");
+    } else if (/grateful|gratitude|thank|present|presence|prayer|pray|silence|silent|family|wife|husband|\bson\b|daughter|kids|friend|nature|walk|\bmass\b|rosary|\bgod\b|jesus/.test(low)) {
+      paras.push("There’s gratitude and presence threaded through what you wrote. Notice that those moments cost you nothing but your attention — the very thing being fought over all day.");
+    } else {
+      paras.push("If you can, tomorrow name one moment you were truly present — a face you actually saw. The examen isn’t only about what stole you; it’s about catching the good, too.");
+    }
+
+    if (hits.length) {
+      var rx = hits[0].rx, label = hits[0].label, count = 0;
+      for (var i = 1; i <= n; i++) {
+        var r = data.days && data.days[i]; if (!r) continue;
+        var txt = [(r.ex && r.ex[0]) || '', (r.ex && r.ex[1]) || '', (r.ex && r.ex[2]) || '', (r.ex && r.ex[3]) || '', (r.ex && r.ex[4]) || '', r.notes || ''].join(' ').toLowerCase();
+        if (rx.test(txt)) count++;
+      }
+      if (count >= 2) {
+        var ord = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'][count] || (count + 'th');
+        paras.push("This is the " + ord + " day " + label + " has surfaced. The recurrence is the gift: your attention has a habit, and you’re learning its exact shape. Named habits loosen; unnamed ones run the show.");
+      }
+    }
+
+    if (answered.length === 0) {
+      paras = ["You opened today but didn’t write yet — and that’s allowed; some days you just sit with it. When you’re ready, even one honest line will surprise you. The simplest place to start is the last movement: a single small fence for tomorrow."];
+    } else if (blanks.length >= 2) {
+      var missing = blanks.map(function (i) { return movementNames[i]; }).slice(0, 2).join(" and ");
+      paras.push("You moved through " + answered.length + " of the five movements. No pressure to fill them all — but a sentence in " + missing + " is often where the surprise hides.");
+    } else if (blanks.length === 0 && wordCount > 40) {
+      paras.push("You gave all five movements honest attention today. That depth — Stillness through Resolve — is where the change actually lives.");
+    }
+
+    return { paras: paras, custody: resolve || null, hasResolve: !!resolve };
+  }
+
+  function renderCourseReflection() {
+    var total = AX.days.length;
+    var n = Math.max(1, Math.min(state.dayNum || 1, total));
+    var day = AX.days[n - 1];
+    var r = buildDayReflection(n);
+    app.innerHTML =
+      backbar('Day ' + n) +
+      '<div class="stack">' +
+      '<div class="es-kicker">Day ' + n + ' · ' + esc(titleCase(day.title)) + '</div>' +
+      '<h1 class="serif">A reflection on today</h1>' +
+      '<p class="muted small">Drawn only from what you wrote, here on this device — a mirror held up, never a verdict.</p>' +
+      '<div class="card reflection">' +
+        r.paras.map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('') +
+      '</div>' +
+      (r.hasResolve ?
+        '<div class="callout"><span class="co-ico">🕯️</span><div class="co-body"><strong>Your custody for tomorrow, in your words:</strong><br>“' + esc(r.custody) + '”<br><span class="small muted">Keep just this one. Small fences make large freedoms.</span></div></div>'
+        :
+        '<div class="callout privacy"><span class="co-ico">🕯️</span><div class="co-body">Before you close: choose one small, concrete fence for tomorrow — “no phone before prayer,” say. One is enough.</div></div>') +
+      '<div class="stepbar">' +
+        '<button class="btn ghost" data-action="open-day" data-day="' + n + '">Back to today</button>' +
+        (n < total ? '<button class="btn" data-action="open-day" data-day="' + (n + 1) + '">Continue — Day ' + (n + 1) + '</button>'
+                   : '<button class="btn" data-action="go" data-view="course">Finish the 30 days</button>') +
+      '</div>' +
+      '<button class="btn quiet block" data-action="go" data-view="course">All 30 days</button>' +
+      '</div>';
   }
 
   function splitLabel(s) {
@@ -1240,7 +1361,7 @@
     var active = {
       home: 'home', lens: 'exam', sectionlist: 'exam', section: 'exam',
       list: 'list', examen: 'examen', examenhistory: 'examen', guide: 'home', settings: 'settings',
-      course: 'course', courseintro: 'course', coursehowto: 'course', courseday: 'course', unlock: 'course', unlocked: 'course'
+      course: 'course', courseintro: 'course', coursehowto: 'course', courseday: 'course', coursereflect: 'course', unlock: 'course', unlocked: 'course'
     }[state.view] || 'home';
     bar.innerHTML = TABS.filter(function (t) { return t.view !== 'course' || AX; }).map(function (t) {
       return '<button class="tab" data-action="tab" data-view="' + t.view + '"' +
@@ -1265,6 +1386,7 @@
       case 'courseintro': renderCourseIntro(); break;
       case 'coursehowto': renderCourseHowTo(); break;
       case 'courseday': renderCourseDay(); break;
+      case 'coursereflect': renderCourseReflection(); break;
       case 'unlock': renderUnlock(); break;
       case 'unlocked': renderUnlocked(); break;
       case 'settings': renderSettings(); break;
@@ -1364,6 +1486,7 @@
       return;
     }
     if (action === 'examen-history') return go('examenhistory');
+    if (action === 'reflect-day') { return go('coursereflect'); }
     if (action === 'begin-course-reading') { setAttnIntroSeen(); return go('courseintro'); }
     if (action === 'skip-course-intro') { setAttnIntroSeen(); return go('course', { noPush: true }); }
     if (action === 'open-day') {

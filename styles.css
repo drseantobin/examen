@@ -252,6 +252,11 @@ textarea.reflect:focus { outline: 2px solid var(--accent); outline-offset: 1px; 
 .book-cover .bc-sub { font-family: var(--font-serif); font-style: italic; color: var(--ink-soft); font-size: 1.1rem; margin: 0; }
 .book-cover .bc-byline { font-size: .85rem; letter-spacing: .04em; color: var(--ink-faint); margin-top: 8px; }
 .book-cover .divider { width: 60px; margin-left: auto; margin-right: auto; }
+/* end-of-day reflection card */
+.reflection p { line-height: 1.62; color: var(--ink); margin: 0; }
+.reflection p + p { margin-top: .85em; }
+.reflection p:first-child { font-family: var(--font-serif); font-size: 1.12rem; color: var(--ink); }
+
 /* a drop cap on the preface — a small "you are opening a book" signal */
 .reading.book > p:first-of-type::first-letter {
   font-family: var(--font-serif); font-size: 3.1rem; line-height: .72;
