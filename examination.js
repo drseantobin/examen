@@ -151,20 +151,24 @@ window.EXAMINATION_CONTENT = {
       id: 'lust',
       emoji: '🤍',
       name: 'Lust',
-      tag: { adult: 'Disordered desire for sexual pleasure. Its remedy is the virtue of chastity.' },
+      tag: {
+        child: 'Treating my body and other people with respect, and growing in self-control.',
+        teen: 'Keeping the heart, eyes, and body pure, and learning self-control. Its remedy is the virtue of chastity.',
+        adult: 'Disordered desire for sexual pleasure. Its remedy is the virtue of chastity.'
+      },
       body: {
-        child: 'Our bodies are good gifts from God, and we treat them and others with respect and modesty. That means not looking at bad pictures, and keeping private things private.',
-        teen: 'Lust is reducing yourself or another person to an object of sexual pleasure rather than seeing the whole person God made. This can include impure thoughts, viewing pornography, or sexual activity outside of marriage. The cure is chastity: respecting the body and reserving sexual love for marriage as God designed it.',
+        child: 'Our bodies are a good gift from God. We treat our own body and other people with respect and kindness, and we practice self-control — saying no to wants and impulses that are not good for us. The opposite is a clean, respectful heart.',
+        teen: 'This is about purity: keeping your heart, eyes, and body good and respectful, and learning self-control over your impulses. It means treating yourself and everyone else as a whole person made and loved by God — never as a thing to use. The virtue that grows here is chastity: a self-mastery that frees you to love well.',
         adult: 'Lust is the disordered desire for, or enjoyment of, sexual pleasure apart from its God-given meaning within marriage (CCC 2351). It can include pornography, masturbation, fornication, adultery, and impure thoughts willingly entertained. Its remedy is chastity, which integrates sexuality into the whole person and frees us to love. In confession one need only name the kind of sin and, for grave sins, the number or frequency as best one can recall.'
       },
       q: {
-        child: ['Do I treat my body and others with respect?', 'Have I looked at pictures I know I shouldn\'t?'],
-        teen: ['Have I deliberately entertained impure thoughts or fantasies?', 'Have I looked at pornography or immodest images?', 'Have I treated myself or another person as an object instead of a whole person?', 'Have I been immodest, or led others toward impurity?'],
+        child: ['Do I treat my body and other people with respect and kindness?', 'Can I say no to wants or impulses that are not good for me?', 'Am I careful and good about what I watch and look at?'],
+        teen: ['Have I kept watch over my eyes and heart — careful about what I look at and dwell on?', 'Have I treated myself and others with respect, as whole persons and not as things?', 'Have I practiced self-control over my impulses?', 'Have I been modest in how I dress and act?'],
         adult: ['Have I willingly entertained impure thoughts, desires, or fantasies?', 'Have I viewed pornography or sought out impure images?', 'Have I sinned against chastity through masturbation, fornication, or adultery?', 'Have I treated my own body or another person as an object rather than a person to be loved?', 'Where is God calling me toward greater purity, freedom, and self-gift?']
       },
       check: {
-        child: ['I looked at pictures I knew were bad', 'I did not respect my body or others\'', 'I was not modest', 'I said or watched something impure'],
-        teen: ['I entertained impure thoughts on purpose', 'I looked at pornography or immodest images', 'I treated someone as an object', 'I was immodest in how I dressed or acted', 'I led someone else toward impurity'],
+        child: ['I was not respectful of my body or other people', 'I did not have self-control over my wants or impulses', 'I was unkind or rude about someone', 'I watched or looked at things I knew were not good'],
+        teen: ['I did not guard my eyes or heart well', 'I dwelt on thoughts I knew were not pure', 'I treated myself or someone else without respect', 'I was not modest in how I dressed or acted', 'I gave in to impulses instead of practicing self-control'],
         adult: ['I willingly entertained impure thoughts or desires', 'I viewed pornography', 'I committed impure acts (masturbation)', 'I had sexual relations outside of marriage (fornication or adultery)', 'I treated my body or another as an object', 'I was immodest, or led others toward impurity', 'I failed to guard my eyes, heart, or media use', 'I neglected the means that help me grow in chastity']
       }
     }
@@ -280,20 +284,24 @@ window.EXAMINATION_CONTENT = {
       id: 'c6',
       emoji: '🤍',
       name: '6th & 9th Commandments',
-      tag: { adult: 'You shall not commit adultery. You shall not covet your neighbor\'s wife.' },
+      tag: {
+        child: 'Respecting my body and others, and keeping a clean, kind heart.',
+        teen: 'Purity and faithfulness of heart and body. Its remedy is chastity and respect for every person.',
+        adult: 'You shall not commit adultery. You shall not covet your neighbor\'s wife.'
+      },
       body: {
-        child: 'Our bodies are good gifts from God, and we treat them and others with respect and modesty. We keep private things private and do not look at bad pictures.',
-        teen: 'These commandments call us to chastity — respecting the gift of sexuality and reserving sexual love for marriage. They are broken by impure thoughts willingly entertained, pornography, immodesty, and sexual activity outside of marriage. The cure is purity of heart and respect for every person.',
+        child: 'God asks us to respect our bodies and other people, to be kind and modest, and to keep our hearts good and clean. We practice self-control, and we are faithful — true to the people we love.',
+        teen: 'These commandments call you to purity and faithfulness: keeping your heart, eyes, and body good and respectful, practicing self-control, and being true to others. They guard the dignity of every person. The virtue that grows here is chastity — a self-mastery that frees you to love.',
         adult: 'The sixth and ninth commandments call every person to chastity according to their state in life, and they guard the dignity of marriage and the body (CCC 2331-2400, 2514-2533). They are sinned against by lust, pornography, masturbation, fornication, adultery, and impure thoughts willingly entertained; the ninth especially addresses the desires of the heart. Married couples are also called to keep marriage open to life; contraception, deliberately separating union from procreation, is contrary to this gift. One need only confess the kind of sin and, for grave sins, the number or frequency as best one can recall.'
       },
       q: {
-        child: ['Do I treat my body and others with respect?', 'Have I looked at pictures I know I shouldn\'t?'],
-        teen: ['Have I willingly entertained impure thoughts?', 'Have I looked at pornography or immodest images?', 'Have I been immodest, or treated someone as an object?', 'Have I done anything sexual outside of what God asks of me?'],
+        child: ['Do I treat my body and other people with respect and kindness?', 'Am I modest and good in what I do and watch?', 'Do I practice self-control over my impulses?'],
+        teen: ['Have I kept watch over my eyes and heart?', 'Have I been modest and respectful toward myself and others?', 'Have I practiced self-control over my impulses?', 'Have I been faithful and honest in my friendships?'],
         adult: ['Have I willingly entertained impure thoughts or desires?', 'Have I viewed pornography, or sinned through masturbation, fornication, or adultery?', 'Have I been faithful and self-giving to my spouse — in body, attention, and affection?', 'If married, have we kept our love open to life, or used contraception?', 'Have I been immodest, or led others toward impurity?']
       },
       check: {
-        child: ['I looked at bad pictures', 'I did not respect my body or others\'', 'I was not modest', 'I said something impure'],
-        teen: ['I entertained impure thoughts on purpose', 'I looked at pornography or immodest images', 'I was immodest in dress or behavior', 'I treated someone as an object', 'I did something sexual outside of God\'s plan'],
+        child: ['I was not respectful of my body or other people', 'I was not modest or kind', 'I did not practice self-control', 'I watched or looked at things I knew were not good'],
+        teen: ['I did not guard my eyes or heart well', 'I dwelt on thoughts I knew were not pure', 'I was not modest in how I dressed or acted', 'I treated someone without respect', 'I gave in to impulses instead of practicing self-control'],
         adult: ['I willingly entertained impure thoughts or desires', 'I viewed pornography', 'I committed impure acts (masturbation)', 'I had sexual relations outside of marriage (fornication or adultery)', 'I was unfaithful to my spouse in heart or body', 'We used contraception, separating union from openness to life', 'I was immodest or led others toward impurity', 'I neglected the means that protect chastity']
       }
     },
