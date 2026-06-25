@@ -1048,6 +1048,31 @@
         }).join('') +
       '</div>' +
 
+      (attnUnlocked() ? (function () {
+        var wk = [{ w: 1, from: 1, to: 7 }, { w: 2, from: 8, to: 14 }, { w: 3, from: 15, to: 21 }, { w: 4, from: 22, to: 30 }];
+        var totalDone = attnCompletedCount();
+        var s = '<h2 class="serif" style="margin-top:8px">Look back</h2>' +
+          '<p class="muted small">Quiet reviews that gather what you’ve noticed — drawn from your own words, on this device.</p>';
+        var any = false;
+        wk.forEach(function (b) {
+          var c = 0; for (var i = b.from; i <= b.to; i++) if (attnDayTouched(i)) c++;
+          if (c >= 3) {
+            any = true;
+            s += '<button class="card-tap" data-action="open-review" data-from="' + b.from + '" data-to="' + b.to + '" data-kind="week" data-label="Week ' + b.w + '">' +
+              '<div class="ct-title">Week ' + b.w + ' review</div>' +
+              '<div class="ct-desc">Days ' + b.from + '–' + b.to + ' · ' + c + ' evening' + (c === 1 ? '' : 's') + ' you’ve walked</div></button>';
+          }
+        });
+        if (totalDone >= 10) {
+          s += '<button class="card-tap" data-action="open-review" data-from="1" data-to="30" data-kind="final" data-label="Your 30 days">' +
+            '<div class="ct-title">Your 30 days — the full review</div>' +
+            '<div class="ct-desc">A thorough look back across everything you’ve shared</div></button>';
+        } else {
+          s += '<p class="muted small" style="opacity:.85">' + (any ? 'Your full thirty-day review' : 'Your first review') + ' opens once you’ve walked about ten days — ' + totalDone + ' so far.</p>';
+        }
+        return s;
+      })() : '') +
+
       '<div class="callout"><span class="co-ico">🕯️</span><div class="co-body">' +
         'Take one day at a time, in order. You will miss days — returning <em>is</em> the practice. Everything you write stays on this device.' +
       '</div></div>' +
@@ -1212,6 +1237,110 @@
     });
   }
 
+  // Shared attention-theme lexicon (used by the daily reflection AND the week/month reviews).
+  var ATTN_THEMES = [
+    { key: 'feed', label: 'the feed', rx: /phone|scroll|feed|instagram|insta|tiktok|tik tok|twitter|reddit|facebook|snapchat|\bsnap|youtube|social media|\bsocial\b|the app|my apps/, note: "You watched your attention slip toward the feed. That noticing is itself the loosening — what you can see, you no longer obey blindly." },
+    { key: 'news', label: 'the news', rx: /\bnews\b|headline|politic|doomscroll|\bdoom\b/, note: "The pull was toward the news — the endless updating that promises control and delivers unease. Tomorrow, catch the moment the worry reaches for the screen." },
+    { key: 'messages', label: 'messages', rx: /email|inbox|\btext\b|texts|message|slack|whatsapp|notification|dm\b/, note: "Messages kept calling you back. Each ping trains a small reflex; you’re beginning to feel the leash — which is how it loosens." },
+    { key: 'restless', label: 'restlessness', rx: /bored|boredom|restless|idle|fidget|nothing to do|antsy|\bbore\b/, note: "What pulled at you looks like restlessness — the old monks’ acedia, the noonday demon. The cure isn’t force; it’s staying one more minute in the discomfort instead of reaching." },
+    { key: 'anxiety', label: 'anxiety', rx: /anxious|anxiety|worry|worried|stress|overwhelm|afraid|\bfear\b|panic|dread/, note: "Underneath the reaching was anxiety, and the screen offered relief but gave static. Tomorrow, try one slow breath before the reach — let the feeling be felt." },
+    { key: 'escape', label: 'the urge to escape', rx: /escape|numb|avoid|distract|procrastinat|zone out|checked out|switch off/, note: "You caught yourself reaching to escape. Attention flees what it can’t yet bear — and grows, quietly, by staying." },
+    { key: 'work', label: 'busyness', rx: /\bwork\b|busy|deadline|\btask|productiv|meetings?/, note: "The day’s busyness fragmented you. Not all of it was yours to carry — some attention you simply spent because the work asked, and forgot you could choose." }
+  ];
+
+  function listJoin(arr) {
+    arr = arr.filter(Boolean);
+    if (arr.length <= 1) return arr[0] || '';
+    if (arr.length === 2) return arr[0] + ' and ' + arr[1];
+    return arr.slice(0, -1).join(', ') + ', and ' + arr[arr.length - 1];
+  }
+
+  /* ---- week / month review (generated ON-DEVICE from the person's own entries) ----
+     Gathers a span of days into one reflection: the attention-pulls that recurred,
+     the moments of presence they named, the fences they set, and what quietly shifted
+     from the first half of the span to the second. The final review is a fuller,
+     sectioned write-up of the whole thirty days. Nothing leaves the device. */
+  function buildRangeReview(from, to, kind) {
+    var dataAll = load(K.attn, {}); var days = dataAll.days || {};
+    function rec(i) { return days[i] || { ex: {}, notes: '' }; }
+    function mv(i, m) { return ((rec(i).ex || {})[m] || '').trim(); }
+    function dayLow(i) { var r = rec(i), ex = r.ex || {}; return [ex[0], ex[1], ex[2], ex[3], ex[4], r.notes].map(function (x) { return x || ''; }).join('  ').toLowerCase(); }
+    function clip(s) { s = (s || '').trim(); return s.length > 150 ? s.slice(0, 147).trim() + '…' : s; }
+    function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+    var touched = []; for (var i = from; i <= to; i++) if (attnDayTouched(i)) touched.push(i);
+    if (!touched.length) {
+      return { title: 'A look back', blocks: [{ paras: ['There’s nothing to gather here yet — these days are still empty. Come back once you’ve spent a few evenings with the practice, and this will hold up a mirror to what you’ve noticed.'] }] };
+    }
+
+    var themes = ATTN_THEMES.map(function (t) { var c = 0; touched.forEach(function (i) { if (t.rx.test(dayLow(i))) c++; }); return { t: t, c: c }; })
+      .filter(function (x) { return x.c > 0; }).sort(function (a, b) { return b.c - a.c; });
+    var grat = []; touched.forEach(function (i) { var g = mv(i, 3); if (g) grat.push(g); });
+    var res = []; touched.forEach(function (i) { var x = mv(i, 4); if (x) res.push(x); });
+
+    // what shifted, first half vs second half (on the dominant theme)
+    function growth() {
+      if (!themes.length || themes[0].c < 2) return '';
+      var mid = Math.floor((from + to) / 2), rx = themes[0].t.rx, label = themes[0].t.label;
+      var fN = 0, fC = 0, sN = 0, sC = 0;
+      touched.forEach(function (i) { if (i <= mid) { fN++; if (rx.test(dayLow(i))) fC++; } else { sN++; if (rx.test(dayLow(i))) sC++; } });
+      if (!fN || !sN) return '';
+      var f = fC / fN, s = sC / sN;
+      if (f - s >= 0.25) return 'There is a quiet sign of freedom here: ' + label + ' pulled at you less in the second half than the first. That is the practice doing its slow work — attention, taken back a little at a time.';
+      if (s - f >= 0.25) return cap(label) + ' actually grew louder in the second half. That’s worth sitting with — not as failure, but as information. Something in this season is asking for you, and the feed is the symptom, not the cause.';
+      return cap(label) + ' held steady across these days — a familiar companion. Naming it, again and again, is how its grip slowly loosens.';
+    }
+
+    var blocks = [];
+    if (kind === 'final') {
+      blocks.push({ paras: [touched.length >= 25
+        ? 'You did it — or very nearly: ' + touched.length + ' of thirty evenings spent watching your own attention. That alone sets you apart. Almost no one does the slow thing for a month.'
+        : 'Over these thirty days you came back ' + touched.length + ' times. Not every evening — and that was never the point. You kept returning, and returning is the whole of it.'] });
+      if (themes.length) {
+        var topl = themes.slice(0, 3).map(function (x) { return x.t.label + ' (' + x.c + (x.c === 1 ? ' day' : ' days') + ')'; });
+        blocks.push({ heading: 'What kept pulling at you', paras: ['Across the month, your attention was pulled most often by ' + listJoin(topl) + '. Naming a thing that many times isn’t failure — it’s a map. You now know, in your own words, where your attention goes when no one is watching.'] });
+      }
+      var g = growth(); if (g) blocks.push({ heading: 'What shifted', paras: [g] });
+      if (grat.length) blocks.push({ heading: 'Where you were present', paras: ['You also kept catching the good — the moments your attention landed where it belonged:', grat.slice(-3).map(function (x) { return '“' + clip(x) + '”'; }).join('   ·   '), 'Hold onto these. They are what all of it was for.'] });
+      if (res.length) blocks.push({ heading: 'What you resolved', paras: ['Night after night you set small fences. Among them:', res.slice(-4).map(function (x) { return '“' + clip(x) + '”'; }).join('   ·   '), 'Keep the one that still has weight. A single fence, kept, is worth more than ten intended.'] });
+      blocks.push({ paras: ['The thirty days end, but the five movements don’t. You can pray them for the rest of your life, in a few honest minutes a night. You’ve proven you can stay. Go on staying — present to God, to the people in front of you, and to your own one life, which is happening right now.'] });
+      return { title: 'Your thirty days', blocks: blocks };
+    }
+
+    // weekly
+    blocks.push({ paras: ['You spent ' + touched.length + ' of these seven days with the practice. ' +
+      (touched.length >= 5 ? 'That’s a real rhythm.' : (touched.length >= 3 ? 'A good start — the rhythm is forming.' : 'Even a few honest looks change how you see.'))] });
+    if (themes.length) {
+      var tl = themes.slice(0, 2).map(function (x) { return x.t.label + ' (' + x.c + (x.c === 1 ? ' day' : ' days') + ')'; });
+      blocks.push({ paras: ['What pulled at you most this week: ' + listJoin(tl) + '. Watch for it again — what you can see, you no longer obey blindly.'] });
+    }
+    var gw = growth(); if (gw) blocks.push({ paras: [gw] });
+    if (grat.length) blocks.push({ paras: ['And where you were present: “' + clip(grat[grat.length - 1]) + '” Attention given in love is the most human thing you do.'] });
+    if (res.length) blocks.push({ paras: ['Carry one fence into next week: “' + clip(res[res.length - 1]) + '”'] });
+    blocks.push({ paras: ['Rest. Begin again tomorrow.'] });
+    return { title: 'This week, looked back on', blocks: blocks };
+  }
+
+  function renderCourseReview() {
+    if (!attnUnlocked()) return renderUnlock();
+    var r = state.review || { from: 1, to: 30, kind: 'final', label: 'Your 30 days' };
+    var data = buildRangeReview(r.from, r.to, r.kind);
+    app.innerHTML =
+      backbar('The Attention Examen') +
+      '<div class="stack">' +
+      '<div class="es-kicker">' + esc(r.label) + '</div>' +
+      '<h1 class="serif">' + esc(data.title) + '</h1>' +
+      '<p class="muted small">Gathered only from your own words, here on this device — a mirror, never a verdict.</p>' +
+      '<div class="card reflection">' +
+        data.blocks.map(function (b) {
+          return (b.heading ? '<h3 class="serif" style="margin:16px 0 6px">' + esc(b.heading) + '</h3>' : '') +
+            b.paras.map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('');
+        }).join('') +
+      '</div>' +
+      '<button class="btn quiet block" data-action="go" data-view="course">All 30 days</button>' +
+      '</div>';
+  }
+
   /* ---- end-of-day reflection (generated ON-DEVICE from the user's own entries) ----
      This is NOT an LLM call and nothing leaves the device. It reads what the person
      wrote in the day's five movements + notes, detects attention themes, reflects
@@ -1230,16 +1359,7 @@
     var blanks = [0, 1, 2, 3, 4].filter(function (i) { return !get(i); });
     var wordCount = (all.match(/\S+/g) || []).length;
 
-    var THEMES = [
-      { key: 'feed', label: 'the feed', rx: /phone|scroll|feed|instagram|insta|tiktok|tik tok|twitter|reddit|facebook|snapchat|\bsnap|youtube|social media|\bsocial\b|the app|my apps/, note: "You watched your attention slip toward the feed. That noticing is itself the loosening — what you can see, you no longer obey blindly." },
-      { key: 'news', label: 'the news', rx: /\bnews\b|headline|politic|doomscroll|\bdoom\b/, note: "The pull was toward the news — the endless updating that promises control and delivers unease. Tomorrow, catch the moment the worry reaches for the screen." },
-      { key: 'messages', label: 'messages', rx: /email|inbox|\btext\b|texts|message|slack|whatsapp|notification|dm\b/, note: "Messages kept calling you back. Each ping trains a small reflex; you’re beginning to feel the leash — which is how it loosens." },
-      { key: 'restless', label: 'restlessness', rx: /bored|boredom|restless|idle|fidget|nothing to do|antsy|\bbore\b/, note: "What pulled at you looks like restlessness — the old monks’ acedia, the noonday demon. The cure isn’t force; it’s staying one more minute in the discomfort instead of reaching." },
-      { key: 'anxiety', label: 'anxiety', rx: /anxious|anxiety|worry|worried|stress|overwhelm|afraid|\bfear\b|panic|dread/, note: "Underneath the reaching was anxiety, and the screen offered relief but gave static. Tomorrow, try one slow breath before the reach — let the feeling be felt." },
-      { key: 'escape', label: 'the urge to escape', rx: /escape|numb|avoid|distract|procrastinat|zone out|checked out|switch off/, note: "You caught yourself reaching to escape. Attention flees what it can’t yet bear — and grows, quietly, by staying." },
-      { key: 'work', label: 'busyness', rx: /\bwork\b|busy|deadline|\btask|productiv|meetings?/, note: "The day’s busyness fragmented you. Not all of it was yours to carry — some attention you simply spent because the work asked, and forgot you could choose." }
-    ];
-    var hits = THEMES.filter(function (t) { return t.rx.test(low); });
+    var hits = ATTN_THEMES.filter(function (t) { return t.rx.test(low); });
     var paras = [];
 
     var prevTouched = n > 1 ? attnDayTouched(n - 1) : true;
@@ -1385,7 +1505,7 @@
     var active = {
       home: 'home', lens: 'exam', sectionlist: 'exam', section: 'exam',
       list: 'list', examen: 'examen', examenhistory: 'examen', guide: 'home', settings: 'settings',
-      course: 'course', courseintro: 'course', coursehowto: 'course', courseday: 'course', coursereflect: 'course', unlock: 'course', unlocked: 'course'
+      course: 'course', courseintro: 'course', coursehowto: 'course', courseday: 'course', coursereflect: 'course', coursereview: 'course', unlock: 'course', unlocked: 'course'
     }[state.view] || 'home';
     bar.innerHTML = TABS.filter(function (t) { return t.view !== 'course' || AX; }).map(function (t) {
       return '<button class="tab" data-action="tab" data-view="' + t.view + '"' +
@@ -1412,6 +1532,7 @@
       case 'coursehowto': renderCourseHowTo(); break;
       case 'courseday': renderCourseDay(); break;
       case 'coursereflect': renderCourseReflection(); break;
+      case 'coursereview': renderCourseReview(); break;
       case 'unlock': renderUnlock(); break;
       case 'unlocked': renderUnlocked(); break;
       case 'settings': renderSettings(); break;
@@ -1589,6 +1710,15 @@
     }
     if (action === 'examen-history') return go('examenhistory');
     if (action === 'reflect-day') { return go('coursereflect'); }
+    if (action === 'open-review') {
+      state.review = {
+        from: parseInt(t.getAttribute('data-from'), 10),
+        to: parseInt(t.getAttribute('data-to'), 10),
+        kind: t.getAttribute('data-kind'),
+        label: t.getAttribute('data-label')
+      };
+      return go('coursereview');
+    }
     if (action === 'begin-course-reading') { setAttnIntroSeen(); return go('courseintro'); }
     if (action === 'skip-course-intro') { setAttnIntroSeen(); return go('course', { noPush: true }); }
     if (action === 'open-day') {
