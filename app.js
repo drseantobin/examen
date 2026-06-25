@@ -761,23 +761,45 @@
   /* ------------------------------------------------------ COMPILED LIST */
   function renderList() {
     var d = load(K.eoc, {});
-    var groups = [];
+    // Normalize a checklist item so the same sin worded near-identically across the two
+    // lenses (e.g. it lives under both Lust and the 6th Commandment) collapses to one entry.
+    function normSin(s) { return String(s).toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim(); }
+    // 1) gather the raw selections per section
+    var raw = [];
     ['sins', 'commandments'].forEach(function (lens) {
       var secs = lens === 'sins' ? SINS : COMMANDMENTS;
       secs.forEach(function (s) {
         var rec = d[lens] && d[lens][s.id];
         if (!rec) return;
         var checks = pick(s.check, state.age) || [];
-        var items = [];
+        var cItems = [], nItems = [];
         if (rec.checked) Object.keys(rec.checked).forEach(function (ci) {
-          if (rec.checked[ci] && checks[ci]) items.push({ type: 'check', text: checks[ci] });
+          if (rec.checked[ci] && checks[ci]) cItems.push(checks[ci]);
         });
         if (rec.notes) Object.keys(rec.notes).forEach(function (qi) {
           var t = (rec.notes[qi] || '').trim();
-          if (t) items.push({ type: 'note', text: t });
+          if (t) nItems.push(t);
         });
-        if (items.length) groups.push({ emoji: s.emoji, name: s.name, items: items });
+        if (cItems.length || nItems.length) raw.push({ emoji: s.emoji, name: s.name, checks: cItems, notes: nItems });
       });
+    });
+    // 2) count how many places each checked sin came up across the whole examination
+    var counts = {};
+    raw.forEach(function (g) { g.checks.forEach(function (c) { var k = normSin(c); counts[k] = (counts[k] || 0) + 1; }); });
+    // 3) build display groups — show each checked sin ONCE (first place it appears), and if it
+    //    surfaced in more than one place, mark it rather than repeating it. Notes are never merged.
+    var shown = {};
+    var groups = [];
+    raw.forEach(function (g) {
+      var items = [];
+      g.checks.forEach(function (c) {
+        var k = normSin(c);
+        if (shown[k]) return;
+        shown[k] = true;
+        items.push({ type: 'check', text: c, dup: counts[k] > 1 });
+      });
+      g.notes.forEach(function (t) { items.push({ type: 'note', text: t }); });
+      if (items.length) groups.push({ emoji: g.emoji, name: g.name, items: items });
     });
 
     var hasAny = groups.length > 0;
@@ -792,7 +814,7 @@
             '<ul>' + g.items.map(function (it) {
               return it.type === 'note'
                 ? '<li><span class="list-note">' + esc(it.text) + '</span></li>'
-                : '<li>' + esc(it.text) + '</li>';
+                : '<li>' + esc(it.text) + (it.dup ? ' <span class="dup-note">noted in more than one place</span>' : '') + '</li>';
             }).join('') + '</ul></div>';
         }).join('') +
         '<div class="callout mercy"><span class="co-ico">🕊️</span><div class="co-body">' +
