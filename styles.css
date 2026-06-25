@@ -260,6 +260,12 @@ textarea.reflect:focus { outline: 2px solid var(--accent); outline-offset: 1px; 
 .reading p { font-size: 1.06rem; line-height: 1.72; color: var(--ink-soft); }
 .reading h1, .reading h2 { color: var(--ink); }
 
+/* blue circuit-brain emblem (Attention Examen) */
+.brain-ico { background: var(--accent-soft); }
+.brain-ico img { width: 36px; height: 36px; object-fit: contain; display: block; }
+.brain-mark { background: var(--accent-soft); }
+.brain-mark img { width: 70px; height: 70px; object-fit: contain; display: block; }
+
 /* devotional title page (front matter) */
 .book-cover { padding-top: 5vh; }
 .bc-eyebrow { font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); }

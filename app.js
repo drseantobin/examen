@@ -609,7 +609,7 @@
 
       (AX ?
       '<button class="card-tap" data-action="go" data-view="course">' +
-        '<div class="row"><div class="ct-ico">🕯️</div><div>' +
+        '<div class="row"><div class="ct-ico brain-ico"><img src="brain.png" alt="" /></div><div>' +
           '<div class="ct-title">The Attention Examen</div>' +
           '<div class="ct-desc">A 30-day practice to reclaim your attention — the faculty by which you love.</div>' +
         '</div></div>' +
@@ -983,7 +983,7 @@
       backbar('Home') +
       '<div class="stack book-cover center">' +
         '<div class="bc-eyebrow">A 30-day devotional · interactive</div>' +
-        '<div class="bc-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6"/><path d="M12 21a6 6 0 0 0 6-6c0-3-2.5-5-6-9-3.5 4-6 6-6 9a6 6 0 0 0 6 6Z"/></svg></div>' +
+        '<div class="bc-mark brain-mark" aria-hidden="true"><img src="brain.png" alt="" /></div>' +
         '<h1 class="serif bc-title">' + esc(titleCase(AX.meta.title)) + '</h1>' +
         '<p class="bc-sub">' + esc(AX.meta.subtitle) + '</p>' +
         '<div class="bc-byline">' + esc(AX.meta.author) + ' · ' + esc(AX.meta.movement) + '</div>' +

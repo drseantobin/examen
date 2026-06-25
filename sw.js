@@ -1,10 +1,10 @@
 /* Examen AI service worker — offline-first cache of the app shell.
    Bump CACHE on every deploy so clients pick up new code. */
-const CACHE = 'examen-v12';
+const CACHE = 'examen-v13';
 const ASSETS = [
   './', './index.html', './styles.css', './app.js',
   './examination.js', './attention-examen.js',
-  './manifest.webmanifest', './icon.svg'
+  './manifest.webmanifest', './icon.svg', './brain.png'
 ];
 
 self.addEventListener('install', (e) => {
