@@ -23,7 +23,8 @@
     nightly: 'examen_nightly_v1',
     lastConf: 'examen_last_confession',
     seenIntro: 'examen_seen_intro',
-    attn: 'examen_attention_v1'
+    attn: 'examen_attention_v1',
+    voiceAck: 'examen_voice_ack'
   };
   var AX = (typeof window !== 'undefined' && window.ATTENTION_EXAMEN) ? window.ATTENTION_EXAMEN : null;
 
@@ -1334,7 +1335,8 @@
       '</div>' +
 
       '<div class="card"><h3>Your privacy</h3>' +
-        '<p class="small muted">Everything in Examen AI lives only in this browser, on this device. Nothing is ever uploaded. If you clear your browser data — or tap below — it is gone for good.</p>' +
+        '<p class="small muted">Everything you write in Examen AI lives only in this browser, on this device. Nothing is ever uploaded. If you clear your browser data — or tap below — it is gone for good.</p>' +
+        '<p class="small muted">The one exception is the optional <strong>mic / “talk it out”</strong> button: voice typing uses your device’s speech recognition, which on most browsers sends the audio to the device maker (Apple/Google) to transcribe — like the keyboard’s mic key. The resulting text stays here. Typing is always fully private.</p>' +
         '<button class="btn danger block" data-action="erase-all">Erase everything from this device</button>' +
       '</div>' +
 
@@ -1372,6 +1374,7 @@
 
   /* --------------------------------------------------------------- RENDER */
   function render() {
+    stopDictation();
     if (!state.age) { state.view = 'onboard'; renderOnboard(); renderTabs(); return; }
     switch (state.view) {
       case 'home': renderHome(); break;
@@ -1393,6 +1396,63 @@
       default: renderHome();
     }
     renderTabs();
+    enhanceTextareas();
+  }
+
+  /* ----------------------------------------------------- VOICE ("talk it out")
+     A tiny mic on each writing box. Uses the browser/device SpeechRecognition to
+     turn speech into text. IMPORTANT: on most browsers the AUDIO is sent to the
+     device maker (Apple/Google) to be transcribed — like the keyboard's mic key.
+     The resulting TEXT stays on-device like everything else. Shown only where
+     supported; first use asks for an explicit, honest OK. Typing stays fully private. */
+  var SR = (typeof window !== 'undefined') && (window.SpeechRecognition || window.webkitSpeechRecognition);
+  var recog = null, recogTA = null, recogBtn = null;
+  function stopDictation() {
+    if (recogBtn) { try { recogBtn.classList.remove('listening'); } catch (e) {} }
+    if (recog) { try { recog.onend = null; recog.onresult = null; recog.stop(); } catch (e) {} }
+    recog = null; recogTA = null; recogBtn = null;
+  }
+  function startDictation(ta, btn) {
+    stopDictation();
+    try {
+      recog = new SR();
+      recog.lang = 'en-US'; recog.continuous = true; recog.interimResults = true;
+      recogTA = ta; recogBtn = btn; btn.classList.add('listening');
+      recog.onresult = function (e) {
+        var add = '';
+        for (var i = e.resultIndex; i < e.results.length; i++) {
+          if (e.results[i].isFinal) add += e.results[i][0].transcript;
+        }
+        add = add.trim();
+        if (add) {
+          var sep = ta.value && !/\s$/.test(ta.value) ? ' ' : '';
+          ta.value = ta.value + sep + add;
+          ta.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      };
+      recog.onerror = function () { stopDictation(); };
+      recog.onend = function () { stopDictation(); };
+      recog.start();
+    } catch (e) { stopDictation(); }
+  }
+  function enhanceTextareas() {
+    if (!SR || !app) return;
+    var tas = app.querySelectorAll('textarea.reflect');
+    Array.prototype.forEach.call(tas, function (ta) {
+      if (ta.id === 'unlockCode' || ta.getAttribute('data-mic')) return;
+      ta.setAttribute('data-mic', '1');
+      var wrap = document.createElement('span');
+      wrap.className = 'ta-wrap';
+      ta.parentNode.insertBefore(wrap, ta);
+      wrap.appendChild(ta);
+      var btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'mic-btn';
+      btn.setAttribute('data-action', 'mic');
+      btn.setAttribute('aria-label', 'Talk it out (voice typing)');
+      btn.setAttribute('title', 'Talk it out');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg>';
+      wrap.appendChild(btn);
+    });
   }
 
   /* --------------------------------------------------------------- TOAST */
@@ -1412,6 +1472,26 @@
     var action = t.getAttribute('data-action');
 
     if (action === 'back') return back();
+    if (action === 'mic') {
+      var wrap = t.closest('.ta-wrap');
+      var ta = wrap && wrap.querySelector('textarea');
+      if (!ta) return;
+      if (recogTA === ta) { stopDictation(); return; }   // tap again to stop
+      if (!rawGet(K.voiceAck)) {
+        var ok = confirm(
+          'Talk it out — a note on privacy.\n\n' +
+          'Voice typing uses your device’s built-in speech recognition to turn what you say into text. ' +
+          'On most phones and browsers that means the audio is sent to the device maker (such as Apple or Google) ' +
+          'to be transcribed — the same as the mic key on your keyboard. The words it writes stay here on your ' +
+          'device, like everything else. You can always just type instead, which is completely private.\n\n' +
+          'Use voice typing?'
+        );
+        if (!ok) return;
+        rawSet(K.voiceAck, '1');
+      }
+      startDictation(ta, t);
+      return;
+    }
     if (action === 'tab') { var v = t.getAttribute('data-view'); state.stack = []; return go(v, { noPush: true }); }
     if (action === 'go') return go(t.getAttribute('data-view'));
 

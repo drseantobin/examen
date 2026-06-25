@@ -181,6 +181,22 @@ textarea.reflect { width: 100%; min-height: 96px; resize: vertical; border: 1px 
   border-radius: var(--radius-sm); padding: 13px 14px; font: inherit; color: var(--ink);
   background: var(--bg); line-height: 1.5; }
 textarea.reflect:focus { outline: 2px solid var(--accent); outline-offset: 1px; background: var(--card); }
+/* "talk it out" mic on each writing box */
+.ta-wrap { display: block; position: relative; }
+.ta-wrap textarea.reflect { padding-bottom: 40px; }
+.mic-btn { position: absolute; right: 8px; bottom: 8px; width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--card); color: var(--ink-faint);
+  display: grid; place-items: center; box-shadow: var(--shadow); cursor: pointer;
+  transition: transform .1s ease, color .12s ease, background .12s ease; }
+.mic-btn:hover { color: var(--accent-ink); }
+.mic-btn:active { transform: scale(.92); }
+.mic-btn.listening { background: var(--accent); color: #fff; border-color: var(--accent);
+  animation: micPulse 1.3s ease-in-out infinite; }
+@keyframes micPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(111,90,214,.45); }
+  50% { box-shadow: 0 0 0 7px rgba(111,90,214,0); }
+}
+@media print { .mic-btn { display: none !important; } }
 .checklist { margin-top: var(--s4); }
 .checklist .cl-label { font-size: .82rem; font-weight: 650; letter-spacing: .03em; text-transform: uppercase;
   color: var(--ink-faint); margin-bottom: var(--s2); }
