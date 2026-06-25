@@ -14,7 +14,7 @@ window.ATTENTION_EXAMEN = {
       "I am a clinical psychologist. I spend my days with people who are suffering, and I have watched something change in the room over the last decade. The suffering used to arrive as a story — a loss, a wound, a fear with a shape. It still does. But underneath the story now there is a second, quieter affliction that almost no one names because it does not feel like an affliction. It feels like normal life. People cannot hold their own attention anymore. They cannot sit in a feeling long enough to learn what it is telling them. They reach for the phone the way a man underwater reaches for the surface — not as a choice, but as a reflex against the unbearable experience of being alone with themselves.",
       "This is not a willpower problem. You are not weak. You are being farmed. There are buildings full of brilliant people whose entire profession is to take the one thing your soul most needs — your attention, the faculty by which you love God and love your neighbor — and sell it to the highest bidder, fragment by fragment, all day long. And now those same systems are being handed something new: an intelligence that does not get tired, does not look away, and learns the exact shape of your weakness faster than you can.",
       "The old monks understood the stakes better than we do. They did not flee to the desert to escape the world. They fled to recover the faculty the world had stolen — the ability to pay sustained, undivided, loving attention. They called the enemy of that faculty by an old name: acedia. The noonday demon. The spirit of restlessness that makes you unable to stay. We have built a civilization that runs on acedia and calls it engagement.",
-      "This workbook is a small act of exodus.",
+      "This practice is a small act of exodus.",
       "It borrows its bones from one of the oldest tools the Church ever made for the examination of a soul: the Ignatian Examen, the daily review by which a person learns to see where God was moving in their day and where they turned away. I have rebuilt it for our specific captivity. The classical Examen asks, \"Where did I sin today?\" This one asks the question underneath that one, the question for our age: Where did my attention go today — and who was forming me through it?",
       "Because attention is not neutral. Attention is the beginning of love. What you attend to, you begin to resemble. What captures your eyes captures your desire, and what captures your desire is, slowly, making you into someone. The feed is not just wasting your time. It is catechizing you. Every scroll is a small liturgy, and you are being formed by it whether you consent or not.",
       "For thirty days, you are going to do something almost no one in your life is doing. You are going to watch your own attention. Not to shame it. To free it. You are going to learn, by honest daily observation, where it leaks, what steals it, what it is being trained to want — and you are going to take it back, six minutes at a time, and put it where it belongs.",
@@ -34,7 +34,7 @@ window.ATTENTION_EXAMEN = {
       "• A PRACTICE — one small, concrete custody to carry into the day or the next.",
       "• Lines to write. Write by hand if you can. The hand knows things the thumb does not.",
       "WHEN. Most people do the Examen in the evening, looking back over the day. That is the classical form and I recommend it. But if your mornings are quieter, do the reading in the morning and the review of the previous day then. Pick a time and guard it like it matters, because it does.",
-      "THE FIVE MOVEMENTS. Every day's Examen moves through the same five steps. Learn them, and you will have a practice you can keep for the rest of your life, long after this workbook is finished:",
+      "THE FIVE MOVEMENTS. Every day's Examen moves through the same five steps. Learn them, and you will have a practice you can keep for the rest of your life, long after these thirty days are done:",
       "1. STILLNESS — Come to rest. Put the phone in another room. Notice that you have a body, breath, a heartbeat. You are not a mind on a screen. You are a creature before God.",
       "2. REVIEW — Walk back through your day and ask honestly: Where did my attention actually go? Not where I meant it to go. Where it went. Trace it like a detective, without judgment yet.",
       "3. RECOGNITION — Look at what held you. Ask: Who or what was forming me through that attention? What was it teaching me to want, to fear, to love? Attention is never idle. Something was being built in you.",
@@ -127,7 +127,7 @@ window.ATTENTION_EXAMEN = {
         "Reckoning & Gratitude: Where today were you most yourself, most present? What made that possible?",
         "Resolve: One place or time tomorrow you will keep as a sanctuary from the screen."
       ],
-      "practice": "Practice: Pick one \"thin place\" in your home — a chair, the table, the bedroom — and declare it phone-free. Defend that border for the rest of this workbook.",
+      "practice": "Practice: Pick one \"thin place\" in your home — a chair, the table, the bedroom — and declare it phone-free. Defend that border for the rest of these thirty days.",
       "journalPrompts": [
         "Notes: \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
         "\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
@@ -148,7 +148,7 @@ window.ATTENTION_EXAMEN = {
         "Reckoning & Gratitude: Thank God that you are noticing at all. A week ago you could not see this.",
         "Resolve: Tomorrow, when you catch a phantom reach, pause for one breath before you obey it. One breath of freedom."
       ],
-      "practice": "Practice: Move the most-used app off your home screen, or delete it for the duration of this workbook. Add friction. Freedom often begins as inconvenience.",
+      "practice": "Practice: Move the most-used app off your home screen, or delete it for the duration of these thirty days. Add friction. Freedom often begins as inconvenience.",
       "journalPrompts": [
         "Notes: \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
         "\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
@@ -408,7 +408,7 @@ window.ATTENTION_EXAMEN = {
         "Reckoning & Gratitude: If a moment of silence today brought you anything — a thought, a peace, a grief that needed grieving — give thanks.",
         "Resolve: Build one island of silence into tomorrow. No podcast, no music, no voice. Just the quiet."
       ],
-      "practice": "Practice: Take one daily activity you normally fill with audio — the commute, the shower, the walk, the dishes — and do it in silence for the rest of this workbook. Let the quiet do its slow work.",
+      "practice": "Practice: Take one daily activity you normally fill with audio — the commute, the shower, the walk, the dishes — and do it in silence for the rest of these thirty days. Let the quiet do its slow work.",
       "journalPrompts": [
         "Notes: \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
         "\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
@@ -528,7 +528,7 @@ window.ATTENTION_EXAMEN = {
       "day": 22,
       "title": "ATTENTION IS THE BEGINNING OF LOVE",
       "reading": [
-        "Here is the truth the whole workbook has been moving toward: attention is the rarest and purest form of generosity. To attend to someone — fully, without distraction, without the phone face-up on the table — is to say with your whole being, \"You exist, and you matter, and I am here.\" The philosopher called attention the rarest form of generosity. The saint would have called it love. This is why the stakes are so high. The same faculty being farmed by the feed is the faculty by which you love God and neighbor. Every minute you reclaim is not just minutes saved. It is love made possible. You are not fighting for productivity. You are fighting for your capacity to love at all.",
+        "Here is the truth this whole practice has been moving toward: attention is the rarest and purest form of generosity. To attend to someone — fully, without distraction, without the phone face-up on the table — is to say with your whole being, \"You exist, and you matter, and I am here.\" The philosopher called attention the rarest form of generosity. The saint would have called it love. This is why the stakes are so high. The same faculty being farmed by the feed is the faculty by which you love God and neighbor. Every minute you reclaim is not just minutes saved. It is love made possible. You are not fighting for productivity. You are fighting for your capacity to love at all.",
         "Anchor: \"You shall love the Lord your God with all your heart... and your neighbor as yourself.\" (Matthew 22:37-39) — Love begins with attention."
       ],
       "examenPrompts": [
@@ -622,7 +622,7 @@ window.ATTENTION_EXAMEN = {
         "Reckoning & Gratitude: Name five specific gifts from today. Not categories — specifics. Let them land.",
         "Resolve: Begin or end tomorrow by naming three things you are grateful for, before you touch a screen."
       ],
-      "practice": "Practice: Keep a one-line gratitude record for the rest of this workbook. Three specific gifts each day, written by hand. Let gratitude become the new first liturgy of your attention.",
+      "practice": "Practice: Keep a one-line gratitude record for the rest of these thirty days. Three specific gifts each day, written by hand. Let gratitude become the new first liturgy of your attention.",
       "journalPrompts": [
         "Notes: \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
         "\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
@@ -664,7 +664,7 @@ window.ATTENTION_EXAMEN = {
         "Reckoning & Gratitude: Thank God for the grace of these weeks, and for the work He has done where you could not see it.",
         "Resolve: Commit to a simple form of the Examen you can keep daily, for life. Write it down."
       ],
-      "practice": "Practice: Write your own short, permanent form of the Examen — five lines you can pray in five minutes any night. This is the tool you keep when the workbook is closed.",
+      "practice": "Practice: Write your own short, permanent form of the Examen — five lines you can pray in five minutes any night. This is the tool you keep when these thirty days are over.",
       "journalPrompts": [
         "Notes: \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
         "\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
@@ -680,12 +680,12 @@ window.ATTENTION_EXAMEN = {
       ],
       "examenPrompts": [
         "Stillness: Rest, and gather yourself for the ongoing work of presence in a distracted world.",
-        "Review: Where will the captivity press hardest when this workbook ends? Name your weak points honestly.",
-        "Recognition: What have you built in these weeks that will hold when the structure of the workbook is gone?",
+        "Review: Where will the captivity press hardest when these thirty days end? Name your weak points honestly.",
+        "Recognition: What have you built in these weeks that will hold when the structure of these thirty days is gone?",
         "Reckoning & Gratitude: Thank God for the freedom you have recovered, and ask for the grace to keep it.",
         "Resolve: Name the three practices you will carry forward, no matter what. Write them where you will see them daily."
       ],
-      "practice": "Practice: Write your \"field manual\" — the three to five practices you will keep for life, and the three traps most likely to pull you back. Keep it somewhere you will see it when this workbook is closed.",
+      "practice": "Practice: Write your \"field manual\" — the three to five practices you will keep for life, and the three traps most likely to pull you back. Keep it somewhere you will see it when these thirty days are over.",
       "journalPrompts": [
         "Notes: \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
         "\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
@@ -706,7 +706,7 @@ window.ATTENTION_EXAMEN = {
         "Reckoning & Gratitude: Give thanks for the whole journey — the failures and the graces both. All of it was formation.",
         "Resolve: Begin again tomorrow. The Examen is not finished. It has only just become yours."
       ],
-      "practice": "Practice: Tonight, do nothing but give thanks. Then close this workbook, set down the phone, and be fully present to one person you love — your first free act in a life of recovered attention. Tomorrow, begin again.",
+      "practice": "Practice: Tonight, do nothing but give thanks. Then close the app, set down the phone, and be fully present to one person you love — your first free act in a life of recovered attention. Tomorrow, begin again.",
       "journalPrompts": [
         "Notes: \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
         "\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
