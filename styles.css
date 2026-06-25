@@ -262,9 +262,9 @@ textarea.reflect:focus { outline: 2px solid var(--accent); outline-offset: 1px; 
 
 /* blue circuit-brain emblem (Attention Examen) */
 .brain-ico { background: var(--accent-soft); }
-.brain-ico img { width: 36px; height: 36px; object-fit: contain; display: block; }
+.brain-ico img { width: 40px; height: 40px; object-fit: contain; display: block; }
 .brain-mark { background: var(--accent-soft); }
-.brain-mark img { width: 70px; height: 70px; object-fit: contain; display: block; }
+.brain-mark img { width: 82px; height: 82px; object-fit: contain; display: block; }
 
 /* devotional title page (front matter) */
 .book-cover { padding-top: 5vh; }
