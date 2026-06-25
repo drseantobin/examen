@@ -1070,6 +1070,12 @@
         } else {
           s += '<p class="muted small" style="opacity:.85">' + (any ? 'Your full thirty-day review' : 'Your first review') + ' opens once you’ve walked about ten days — ' + totalDone + ' so far.</p>';
         }
+        if (totalDone >= 1) {
+          s += '<button class="btn ghost small block" style="margin-top:4px" data-action="download-engagement">Download my entries (keep a copy)</button>';
+        }
+        if (totalDone >= 25 || attnDayTouched(30)) {
+          s += '<button class="btn quiet block" data-action="go" data-view="courserestart">Begin a new thirty days…</button>';
+        }
         return s;
       })() : '') +
 
@@ -1341,6 +1347,60 @@
       '</div>';
   }
 
+  // Assemble everything the person wrote across the 30 days + the full review, as plain text.
+  function attnExportText() {
+    var d = load(K.attn, {}); var days = d.days || {};
+    var L = ['Stillness', 'Review', 'Recognition', 'Reckoning & Gratitude', 'Resolve'];
+    var out = [];
+    out.push('THE ATTENTION EXAMEN — my thirty days');
+    out.push('Saved from Examen AI · https://drseantobin.github.io/examen/');
+    out.push('');
+    var fr = buildRangeReview(1, 30, 'final');
+    out.push('—— ' + fr.title + ' ——'); out.push('');
+    fr.blocks.forEach(function (b) {
+      if (b.heading) out.push(b.heading.toUpperCase());
+      b.paras.forEach(function (p) { out.push(p); });
+      out.push('');
+    });
+    out.push('======================================'); out.push('');
+    AX.days.forEach(function (day) {
+      var r = days[day.day]; if (!r) return;
+      var ex = r.ex || {};
+      var any = L.some(function (_, i) { return (ex[i] || '').trim(); }) || (r.notes || '').trim();
+      if (!any) return;
+      out.push('DAY ' + day.day + ' — ' + day.title);
+      L.forEach(function (name, i) { var v = (ex[i] || '').trim(); if (v) out.push(name + ': ' + v); });
+      if ((r.notes || '').trim()) out.push('Notes: ' + r.notes.trim());
+      out.push('');
+    });
+    return out.join('\n');
+  }
+  function downloadEngagement() {
+    try {
+      var blob = new Blob([attnExportText()], { type: 'text/plain;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = 'attention-examen-my-thirty-days.txt';
+      document.body.appendChild(a); a.click();
+      setTimeout(function () { try { URL.revokeObjectURL(url); a.remove(); } catch (e) {} }, 1000);
+      toast('Saved to your device ⬇️');
+    } catch (e) { toast('Couldn’t download here'); }
+  }
+
+  function renderCourseRestart() {
+    if (!attnUnlocked()) return renderUnlock();
+    app.innerHTML =
+      backbar('The Attention Examen') +
+      '<div class="stack">' +
+      '<h1 class="serif">Begin again</h1>' +
+      '<p class="lede">You’ve walked the thirty days. The practice is meant to be returned to — you can start a fresh round whenever you’re ready.</p>' +
+      '<div class="callout privacy"><span class="co-ico">⬇️</span><div class="co-body"><strong>Keep what you wrote first.</strong> Beginning again clears your daily entries from this device. Download your thirty days — every day, and the full review — so they’re always yours.</div></div>' +
+      '<button class="btn block" data-action="download-engagement">Download my thirty days</button>' +
+      '<button class="btn danger block" data-action="confirm-restart">Begin a new thirty days</button>' +
+      '<button class="btn quiet block" data-action="go" data-view="course">Not now</button>' +
+      '</div>';
+  }
+
   /* ---- end-of-day reflection (generated ON-DEVICE from the user's own entries) ----
      This is NOT an LLM call and nothing leaves the device. It reads what the person
      wrote in the day's five movements + notes, detects attention themes, reflects
@@ -1505,7 +1565,7 @@
     var active = {
       home: 'home', lens: 'exam', sectionlist: 'exam', section: 'exam',
       list: 'list', examen: 'examen', examenhistory: 'examen', guide: 'home', settings: 'settings',
-      course: 'course', courseintro: 'course', coursehowto: 'course', courseday: 'course', coursereflect: 'course', coursereview: 'course', unlock: 'course', unlocked: 'course'
+      course: 'course', courseintro: 'course', coursehowto: 'course', courseday: 'course', coursereflect: 'course', coursereview: 'course', courserestart: 'course', unlock: 'course', unlocked: 'course'
     }[state.view] || 'home';
     bar.innerHTML = TABS.filter(function (t) { return t.view !== 'course' || AX; }).map(function (t) {
       return '<button class="tab" data-action="tab" data-view="' + t.view + '"' +
@@ -1533,6 +1593,7 @@
       case 'courseday': renderCourseDay(); break;
       case 'coursereflect': renderCourseReflection(); break;
       case 'coursereview': renderCourseReview(); break;
+      case 'courserestart': renderCourseRestart(); break;
       case 'unlock': renderUnlock(); break;
       case 'unlocked': renderUnlocked(); break;
       case 'settings': renderSettings(); break;
@@ -1710,6 +1771,16 @@
     }
     if (action === 'examen-history') return go('examenhistory');
     if (action === 'reflect-day') { return go('coursereflect'); }
+    if (action === 'download-engagement') { downloadEngagement(); return; }
+    if (action === 'confirm-restart') {
+      if (confirm('Begin a new thirty days?\n\nThis clears your current daily entries from this device so you can start fresh. Your unlock stays — you won’t pay again. If you want to keep what you wrote, download it first.')) {
+        var dd = load(K.attn, {}); dd.days = {}; save(K.attn, dd);  // keep unlock (separate key) + introSeen
+        toast('A fresh thirty days — begin when ready 🕯️');
+        state.stack = [];
+        return go('course', { noPush: true });
+      }
+      return;
+    }
     if (action === 'open-review') {
       state.review = {
         from: parseInt(t.getAttribute('data-from'), 10),
