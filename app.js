@@ -1194,7 +1194,7 @@
         return '<div class="q-block">' +
           (split.label ? '<div class="es-kicker">' + esc(split.label) + '</div>' : '') +
           '<div class="q-text" style="font-size:1.05rem;margin:4px 0 10px">' + esc(split.text) + '</div>' +
-          (i === 0 ? '<div class="small muted" style="margin:-2px 0 10px">You’re on your phone to pray this — that’s alright. Take the breaths now; when you’ve written what you need, let it go down and let the stillness keep going.</div>' : '') +
+          (i === 0 ? '<div class="small muted" style="margin:-2px 0 10px">If you’re on your phone to pray this — that’s alright. Take the breaths now; when you’ve written what you need, let it go down and let the stillness keep going.</div>' : '') +
           '<textarea class="reflect" data-ax="' + i + '" placeholder="Write here… (stays on this device)">' + esc(val) + '</textarea>' +
         '</div>';
       }).join('') +
