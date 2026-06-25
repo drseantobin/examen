@@ -488,7 +488,7 @@
   // ---- Nightly Examen (Ignatian, 5 movements) ------------------------------
   var EXAMEN_STEPS = [
     { id: 'gratitude', kicker: 'Give thanks', q: 'What am I grateful for today? Name the gifts — small and large — that God gave you.' },
-    { id: 'petition',  kicker: 'Ask for light', q: 'Ask God for the grace to see your day honestly, as he sees it. What do you want to notice?' },
+    { id: 'petition',  kicker: 'Ask for light', q: 'Ask God for the light to see your day as he sees it — with honesty, and with mercy. What grace do you most need tonight?' },
     { id: 'review',    kicker: 'Review the day', q: 'Walk back through your day. Where did you find love, joy, or God’s presence? Where did you fall short or turn away?' },
     { id: 'sorrow',    kicker: 'Seek forgiveness', q: 'Where do you need to ask God’s forgiveness? Whom do you need to forgive — including yourself?' },
     { id: 'resolve',   kicker: 'Look to tomorrow', q: 'What one thing will you do tomorrow, with God’s help? End in a short prayer of hope.' }
