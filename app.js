@@ -224,7 +224,7 @@
       q: {
         child: ['Did I eat too much, or grab more than my share?'],
         adult: ['Where does appetite — food, drink, alcohol, or comfort — rule me instead of serving me?',
-                'Do I use eating, drinking, or substances to escape, numb, or excess?']
+                'Do I use eating, drinking, or substances to escape, numb, or comfort myself?']
       },
       check: {
         child: ['I ate too much or was greedy with treats.', 'I complained about my food.',
@@ -1150,8 +1150,8 @@
           esc(day.practice) + '</div></div>' : '') +
 
       '<div class="q-block"><div class="es-kicker">Notes</div>' +
-        '<div class="q-text" style="font-size:1.02rem;margin:4px 0 10px">Anything else from today — what you noticed, what you want to remember.</div>' +
-        '<textarea class="reflect" data-axnotes="1" style="min-height:130px" placeholder="Write by hand if you can; here if it helps.">' + esc(notesVal) + '</textarea>' +
+        '<div class="q-text" style="font-size:1.02rem;margin:4px 0 10px">Anything else from today — what you noticed, or want to hold on to.</div>' +
+        '<textarea class="reflect" data-axnotes="1" style="min-height:130px" placeholder="Write by hand if you can — or here, if that helps.">' + esc(notesVal) + '</textarea>' +
       '</div>' +
 
       '<button class="btn block lg" style="margin-top:8px" data-action="reflect-day">Complete today — see your reflection</button>' +
@@ -1336,7 +1336,7 @@
 
       '<div class="card"><h3>Your privacy</h3>' +
         '<p class="small muted">Everything you write in Examen AI lives only in this browser, on this device. Nothing is ever uploaded. If you clear your browser data — or tap below — it is gone for good.</p>' +
-        '<p class="small muted">The one exception is the optional <strong>mic / “talk it out”</strong> button: voice typing uses your device’s speech recognition, which on most browsers sends the audio to the device maker (Apple/Google) to transcribe — like the keyboard’s mic key. The resulting text stays here. Typing is always fully private.</p>' +
+        '<p class="small muted">The one exception is the optional <strong>mic / “talk it out”</strong> button: voice typing uses your device’s speech recognition. On most browsers that sends the audio to the device maker (Apple/Google) to transcribe — like the keyboard’s mic key. The resulting text stays here. Typing is always fully private.</p>' +
         '<button class="btn danger block" data-action="erase-all">Erase everything from this device</button>' +
       '</div>' +
 
