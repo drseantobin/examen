@@ -990,7 +990,7 @@
         '<hr class="divider" />' +
         '<p class="lede">You don’t just read this one — you practice it. Thirty evenings, a few honest minutes each: you watch where your attention actually went, notice who was forming you through it, and gently take it back.</p>' +
         '<p class="muted">It moves through five small movements you can keep for life. And it remembers where you are, so you can always return.</p>' +
-        '<button class="btn block lg" data-action="begin-course-reading">Open the book</button>' +
+        '<button class="btn block lg" data-action="begin-course-reading">Begin the practice</button>' +
         '<button class="btn quiet block" data-action="skip-course-intro">' + (done > 0 ? 'Skip to the 30 days' : 'Skip the introduction') + '</button>' +
       '</div>';
   }
