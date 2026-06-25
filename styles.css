@@ -257,7 +257,7 @@ textarea.reflect:focus { outline: 2px solid var(--accent); outline-offset: 1px; 
 .day-cell .dc-lock { font-size: .95rem; opacity: .65; }
 .unlock-cta { border-color: var(--amber); background: linear-gradient(180deg, var(--amber-soft), var(--card)); }
 /* long-form reading: a touch more line-height + measure for the workbook prose */
-.reading p { line-height: 1.62; color: var(--ink-soft); }
+.reading p { font-size: 1.06rem; line-height: 1.72; color: var(--ink-soft); }
 .reading h1, .reading h2 { color: var(--ink); }
 
 /* devotional title page (front matter) */
@@ -270,7 +270,7 @@ textarea.reflect:focus { outline: 2px solid var(--accent); outline-offset: 1px; 
 .book-cover .bc-byline { font-size: .85rem; letter-spacing: .04em; color: var(--ink-faint); margin-top: 8px; }
 .book-cover .divider { width: 60px; margin-left: auto; margin-right: auto; }
 /* end-of-day reflection card */
-.reflection p { line-height: 1.62; color: var(--ink); margin: 0; }
+.reflection p { font-size: 1.04rem; line-height: 1.7; color: var(--ink); margin: 0; }
 .reflection p + p { margin-top: .85em; }
 .reflection p:first-child { font-family: var(--font-serif); font-size: 1.12rem; color: var(--ink); }
 

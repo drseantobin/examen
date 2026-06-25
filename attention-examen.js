@@ -1,7 +1,7 @@
 window.ATTENTION_EXAMEN = {
   "meta": {
     "title": "THE ATTENTION EXAMEN",
-    "subtitle": "A 30-Day Workbook for Reclaiming Your Interior Life in the Age of AI",
+    "subtitle": "A 30-Day Practice for Reclaiming Your Interior Life in the Age of AI",
     "author": "Dr. Sean Tobin",
     "movement": "The Inner Exodus"
   },
@@ -25,7 +25,7 @@ window.ATTENTION_EXAMEN = {
     ]
   },
   "howTo": {
-    "title": "How to Use This Workbook",
+    "title": "How to Use This Practice",
     "paragraphs": [
       "This is a thirty-day practice, not a book to read. Reading it in one sitting will do almost nothing. Doing it for thirty days will change you. The difference is the whole point — we have lost the ability to do slow things, and recovering that ability IS the cure.",
       "THE RHYTHM. Each day has the same shape:",

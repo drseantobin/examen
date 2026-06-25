@@ -611,7 +611,7 @@
       '<button class="card-tap" data-action="go" data-view="course">' +
         '<div class="row"><div class="ct-ico">🕯️</div><div>' +
           '<div class="ct-title">The Attention Examen</div>' +
-          '<div class="ct-desc">A 30-day workbook to reclaim your attention — the faculty by which you love.</div>' +
+          '<div class="ct-desc">A 30-day practice to reclaim your attention — the faculty by which you love.</div>' +
         '</div></div>' +
       '</button>' : '') +
 
@@ -1025,15 +1025,15 @@
           '<span class="muted small">' + done + ' of ' + total + ' days</span></div>' +
         '<div class="progress-rail" style="margin-top:10px"><div class="progress-fill" style="width:' + pct + '%"></div></div>' +
         '<button class="btn block lg" style="margin-top:16px" data-action="open-day" data-day="' + cur + '">' +
-          (done === 0 ? 'Begin — Day 1' : (done >= total ? 'Revisit the workbook' : 'Continue — Day ' + cur)) +
+          (done === 0 ? 'Begin — Day 1' : (done >= total ? 'Revisit the practice' : 'Continue — Day ' + cur)) +
         '</button>' +
       '</div>' +
 
       (attnUnlocked() ? '' :
         '<div class="card unlock-cta">' +
           '<div class="row between"><strong>Days 1–3 are free</strong><span class="pill amber">' + esc(ATTN_CONFIG.price) + '</span></div>' +
-          '<p class="small muted" style="margin:8px 0 12px">Unlock all 30 days of the workbook — yours to keep, fully private, on this device.</p>' +
-          '<button class="btn block" data-action="go" data-view="unlock">Unlock the full workbook</button>' +
+          '<p class="small muted" style="margin:8px 0 12px">Unlock all 30 days of the practice — yours to keep, fully private, on this device.</p>' +
+          '<button class="btn block" data-action="go" data-view="unlock">Unlock the full practice</button>' +
         '</div>') +
 
       '<h2 class="serif" style="margin-top:8px">The 30 days</h2>' +
@@ -1090,7 +1090,7 @@
     app.innerHTML =
       backbar('The Attention Examen') +
       '<div class="stack">' +
-      '<div class="pill amber">🔓 Full workbook · ' + esc(ATTN_CONFIG.price) + '</div>' +
+      '<div class="pill amber">🔓 Full practice · ' + esc(ATTN_CONFIG.price) + '</div>' +
       '<h1 class="serif">Unlock all 30 days</h1>' +
       '<p class="lede">You’ve seen the first three days. The full 30-day practice is how the change actually happens — one honest look at a time.</p>' +
 
@@ -1101,7 +1101,7 @@
           '<li>The complete Five Movements practice for life</li>' +
         '</ul>' +
         (hasStore
-          ? '<button class="btn block" style="margin-top:14px" data-action="buy">Get the full workbook — ' + esc(ATTN_CONFIG.price) + '</button>'
+          ? '<button class="btn block" style="margin-top:14px" data-action="buy">Get the full practice — ' + esc(ATTN_CONFIG.price) + '</button>'
           : '<p class="small muted" style="margin-top:14px">Purchase link isn’t set up yet. (Owner: set <code>storeUrl</code> in app.js.)</p>') +
       '</div>' +
 
@@ -1213,8 +1213,8 @@
       ((n === ATTN_CONFIG.freeDays && !attnUnlocked()) ?
         '<div class="card unlock-cta" style="margin-top:8px">' +
           '<div class="row between"><strong>That’s the free preview</strong><span class="pill amber">' + esc(ATTN_CONFIG.price) + '</span></div>' +
-          '<p class="small muted" style="margin:8px 0 12px">You’ve felt the shape of the practice. The next 27 days are where it does its work. Unlock the whole workbook — yours to keep, fully private.</p>' +
-          '<button class="btn block" data-action="go" data-view="unlock">Unlock the full workbook</button>' +
+          '<p class="small muted" style="margin:8px 0 12px">You’ve felt the shape of the practice. The next 27 days are where it does its work. Unlock the whole practice — yours to keep, fully private.</p>' +
+          '<button class="btn block" data-action="go" data-view="unlock">Unlock the full practice</button>' +
         '</div>' +
         '<div class="stepbar">' +
           '<button class="btn ghost" data-action="day-step" data-dir="-1">Previous day</button>' +
