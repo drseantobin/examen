@@ -79,7 +79,7 @@ window.ATTENTION_EXAMEN = {
         "Anchor: \"Be still, and know that I am God.\" (Psalm 46:10) — Notice that stillness comes first. The knowing follows."
       ],
       "examenPrompts": [
-        "Stillness: Three slow breaths. Where is the phone right now? If it is in your hand, set it down across the room.",
+        "Stillness: Three slow breaths. Notice the phone in your hand — and decide that for these few minutes, it serves you and not the other way around. When you finish here, set it down across the room.",
         "Review: Walk through today. When did you first reach for a screen? What were you feeling in the half-second before?",
         "Recognition: What were you reaching away FROM? Boredom? A hard feeling? Silence itself?",
         "Reckoning & Gratitude: Was there a single moment today you were fully present to something or someone? Name it.",
