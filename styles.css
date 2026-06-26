@@ -221,6 +221,10 @@ textarea.reflect:focus { outline: 2px solid var(--accent); outline-offset: 1px; 
 .list-group ul { margin: 0; padding-left: 1.1em; }
 .list-group li { margin-bottom: 6px; }
 .dup-note { color: var(--ink-faint); font-size: .8rem; font-style: italic; white-space: nowrap; }
+.group-virtue { color: var(--accent-ink); font-size: .82rem; font-style: italic; font-weight: 400; }
+.rec-pill { display: inline-block; font-size: .62rem; letter-spacing: .08em; text-transform: uppercase;
+  vertical-align: middle; margin-left: 6px; padding: 2px 7px; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; }
 .list-note { background: var(--bg); border-left: 3px solid var(--accent); padding: 8px 12px;
   border-radius: 0 8px 8px 0; color: var(--ink-soft); margin: 6px 0; font-style: italic; }
 

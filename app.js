@@ -496,6 +496,22 @@
     { id: 'future',   kicker: 'Look toward tomorrow', q: 'Look at what tomorrow holds — the people, the tasks, the meetings. What feelings rise as you look? Turn each one into a prayer: for help, for courage, for healing.' }
   ];
 
+  // Each capital sin paired with the virtue that heals it (hopeful "turn toward" framing).
+  var VIRTUES = { pride: 'humility', envy: 'gratitude', wrath: 'meekness', sloth: 'diligence', avarice: 'generosity', gluttony: 'temperance', lust: 'chastity' };
+
+  // Objective content cues for gently surfacing which capital sins a person's own free-text
+  // examen entries (nightly + Attention) have touched. Keyword heuristics, ON-DEVICE.
+  // SUGGESTIVE, NEVER ACCUSING — the person + the Spirit discern what's truly sin.
+  var SIN_THEMES = [
+    { id: 'pride',    name: 'Pride',    rx: /\bpride\b|prideful|boast|brag|arrogan|\bvain\b|vanity|show(ed|ing)? off|looked down on|contempt|stubborn|had to be right|self-?important|conceit/i },
+    { id: 'envy',     name: 'Envy',     rx: /\benvy\b|envious|jealous|covet|bitter (about|that|toward)|compared myself|wish(ed)? i had|resent\w* (that|them|him|her)/i },
+    { id: 'wrath',    name: 'Anger',    rx: /\banger\b|\bangry\b|\brage\b|furious|lost my temper|yell(ed|ing)?|snapp(ed|ing)|grudge|revenge|hatred|hostile|seething/i },
+    { id: 'sloth',    name: 'Sloth',    rx: /\bsloth\b|\blazy\b|laziness|procrastinat|put (it|them) off|neglect(ed)? (prayer|god|my)|couldn'?t be bothered|apath\w*|didn'?t pray|skipped (prayer|mass)|acedia/i },
+    { id: 'avarice',  name: 'Greed',    rx: /\bgreed\b|greedy|stingy|hoard|materialist|too attached to (money|things|stuff)|wouldn'?t share|spent too much|obsess\w* .*(money|stuff)/i },
+    { id: 'gluttony', name: 'Gluttony', rx: /gluttony|overate|over-?ate|ate too much|drank too much|too much (food|wine|alcohol|to drink)|\bbinge\b|\bdrunk\b|comfort (eating|ate)|overindulg/i },
+    { id: 'lust',     name: 'Lust',     rx: /\blust\b|impure|\bporn|masturbat|fantasiz|immodest|objectif|guard(ing)? my eyes|custody of (the )?eyes/i }
+  ];
+
   /* =============================================================== rendering */
   var app;
   function h(html) { return html; }
@@ -634,8 +650,8 @@
       '<p class="lede">Choose how you’d like to walk through. Both lead to the same honest place — pick whichever helps you see your heart more clearly.</p>' +
 
       '<button class="card-tap" data-action="open-lens" data-lens="sins">' +
-        '<div class="ct-title">By the Seven Capital Sins</div>' +
-        '<div class="ct-desc">Pride, envy, anger, sloth, greed, gluttony, lust — the roots beneath our sins.</div>' +
+        '<div class="ct-title">By the Seven Capital Sins <span class="rec-pill">recommended</span></div>' +
+        '<div class="ct-desc">Pride, envy, anger, sloth, greed, gluttony, lust — the roots beneath our sins, each paired with the virtue that heals it.</div>' +
       '</button>' +
       '<button class="card-tap" data-action="open-lens" data-lens="commandments">' +
         '<div class="ct-title">By the Ten Commandments</div>' +
@@ -760,9 +776,40 @@
     });
   }
 
+  // Bridge: scan the person's own free-text examen entries (nightly LT3F + Attention Examen)
+  // and gather which capital-sin AREAS they objectively touched — to carry into confession.
+  // ON-DEVICE keyword heuristics; suggestive, never accusing.
+  function gatherSinAspects() {
+    var txt = [];
+    var nightly = load(K.nightly, {});
+    Object.keys(nightly).forEach(function (date) {
+      var r = nightly[date] || {};
+      Object.keys(r).forEach(function (k) { if (typeof r[k] === 'string') txt.push(r[k]); });
+    });
+    var attn = load(K.attn, {});
+    if (attn.days) Object.keys(attn.days).forEach(function (n) {
+      var r = attn.days[n] || {}, ex = r.ex || {};
+      Object.keys(ex).forEach(function (i) { if (ex[i]) txt.push(ex[i]); });
+      if (r.notes) txt.push(r.notes);
+    });
+    var low = txt.join('  \n  ').toLowerCase();
+    if (!low.trim()) return [];
+    return SIN_THEMES.filter(function (t) { return t.rx.test(low); })
+      .map(function (t) { return { id: t.id, name: t.name, virtue: VIRTUES[t.id] }; });
+  }
+
   /* ------------------------------------------------------ COMPILED LIST */
   function renderList() {
     var d = load(K.eoc, {});
+    var echoes = gatherSinAspects();
+    var echoesHtml = echoes.length ?
+      '<div class="list-group" style="margin-top:6px">' +
+        '<h3>🕯️ From your recent examens</h3>' +
+        '<p class="muted small" style="margin:-2px 0 8px">Gentle echoes — areas your nightly and daily reflections have touched. Not a verdict; only you, with God, can tell what is truly sin. Bring only what genuinely weighs on you.</p>' +
+        '<ul>' + echoes.map(function (e) {
+          return '<li>' + esc(e.name) + (e.virtue ? ' <span class="group-virtue">— toward ' + esc(e.virtue) + '</span>' : '') + '</li>';
+        }).join('') + '</ul>' +
+      '</div>' : '';
     // Normalize a checklist item so the same sin worded near-identically across the two
     // lenses (e.g. it lives under both Lust and the 6th Commandment) collapses to one entry.
     function normSin(s) { return String(s).toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim(); }
@@ -782,7 +829,7 @@
           var t = (rec.notes[qi] || '').trim();
           if (t) nItems.push(t);
         });
-        if (cItems.length || nItems.length) raw.push({ emoji: s.emoji, name: s.name, checks: cItems, notes: nItems });
+        if (cItems.length || nItems.length) raw.push({ id: s.id, emoji: s.emoji, name: s.name, checks: cItems, notes: nItems });
       });
     });
     // 2) count how many places each checked sin came up across the whole examination
@@ -801,7 +848,7 @@
         items.push({ type: 'check', text: c, dup: counts[k] > 1 });
       });
       g.notes.forEach(function (t) { items.push({ type: 'note', text: t }); });
-      if (items.length) groups.push({ emoji: g.emoji, name: g.name, items: items });
+      if (items.length) groups.push({ id: g.id, emoji: g.emoji, name: g.name, items: items });
     });
 
     var hasAny = groups.length > 0;
@@ -812,13 +859,15 @@
       (hasAny ?
         '<p class="muted">Bring this to confession — read it, or just let it remind you. You only need to name your sins simply and honestly.</p>' +
         groups.map(function (g) {
-          return '<div class="list-group"><h3>' + g.emoji + ' ' + esc(g.name) + '</h3>' +
+          return '<div class="list-group"><h3>' + g.emoji + ' ' + esc(g.name) +
+            (VIRTUES[g.id] ? ' <span class="group-virtue">— toward ' + esc(VIRTUES[g.id]) + '</span>' : '') + '</h3>' +
             '<ul>' + g.items.map(function (it) {
               return it.type === 'note'
                 ? '<li><span class="list-note">' + esc(it.text) + '</span></li>'
                 : '<li>' + esc(it.text) + (it.dup ? ' <span class="dup-note">noted in more than one place</span>' : '') + '</li>';
             }).join('') + '</ul></div>';
         }).join('') +
+        echoesHtml +
         '<div class="callout mercy"><span class="co-ico">🕊️</span><div class="co-body">' +
           'When you’ve confessed, your sins are forgiven — truly and completely. Use <strong>Clear my list</strong> below to wipe it from this device and walk away light.' +
         '</div></div>' +
@@ -829,7 +878,7 @@
           '<p>Your list is empty.</p>' +
           '<p class="muted small">As you examine your conscience, what you note and check will gather here, ready for confession.</p>' +
           '<button class="btn block" data-action="go" data-view="lens" style="margin-top:8px">Examine my conscience</button>' +
-        '</div>') +
+        '</div>' + echoesHtml) +
       '</div>';
   }
 
