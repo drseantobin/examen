@@ -486,12 +486,14 @@
   ];
 
   // ---- Nightly Examen (Ignatian, 5 movements) ------------------------------
+  // The Ignatian examen ("Rummaging for God" — LT3F: Light, Thanks, Feelings, Focus, Future).
+  // Gratitude-first and feelings-led, NOT a sin-inventory (that's the examination-of-conscience section).
   var EXAMEN_STEPS = [
-    { id: 'gratitude', kicker: 'Give thanks', q: 'What am I grateful for today? Name the gifts — small and large — that God gave you.' },
-    { id: 'petition',  kicker: 'Ask for light', q: 'Ask God for the light to see your day as he sees it — with honesty, and with mercy. What grace do you most need tonight?' },
-    { id: 'review',    kicker: 'Review the day', q: 'Walk back through your day. Where did you find love, joy, or God’s presence? Where did you fall short or turn away?' },
-    { id: 'sorrow',    kicker: 'Seek forgiveness', q: 'Where do you need to ask God’s forgiveness? Whom do you need to forgive — including yourself?' },
-    { id: 'resolve',   kicker: 'Look to tomorrow', q: 'What one thing will you do tomorrow, with God’s help? End in a short prayer of hope.' }
+    { id: 'light',    kicker: 'Pray for light', q: 'Before you look back, ask the Holy Spirit for light. You’re not just replaying the day — you’re looking for where God was moving in it. “Lord, help me understand.”' },
+    { id: 'thanks',   kicker: 'Review the day in thanksgiving', q: 'Walk back through the day from the moment you woke — hour to hour, place to place, person to person — and give thanks for each gift you find. Begin with gratitude, not with your failures. What gifts were in these last 24 hours?' },
+    { id: 'feelings', kicker: 'Notice what you felt', q: 'Go back through the day and notice the feelings that surfaced — all of them, without judging. They are the clearest sign of where the real movement was.', hint: 'joy · peace · boredom · fear · anger · hope · gratitude · restlessness · shame · relief · resentment · tenderness' },
+    { id: 'focus',    kicker: 'Pray from one', q: 'Choose the one feeling that most caught your attention — a sign that something important was happening there. Sit with what’s underneath it, and let the prayer that rises come on its own: praise, sorrow, a cry for help or healing.' },
+    { id: 'future',   kicker: 'Look toward tomorrow', q: 'Look at what tomorrow holds — the people, the tasks, the meetings. What feelings rise as you look? Turn each one into a prayer: for help, for courage, for healing.' }
   ];
 
   /* =============================================================== rendering */
@@ -883,18 +885,24 @@
       backbar('Home') +
       '<div class="stack">' +
       '<h1 class="serif">Nightly examen</h1>' +
-      '<p class="muted">' + esc(dateNice) + ' · a quiet review of your day with God</p>' +
+      '<p class="muted">' + esc(dateNice) + ' · the Ignatian examen — light, thanks, feelings, focus, future</p>' +
+
+      '<div class="callout"><span class="co-ico">🌙</span><div class="co-body">' +
+        'Four simple things, nothing more: <strong>show up · pay attention · be honest · don’t worry too much about the results.</strong>' +
+      '</div></div>' +
 
       EXAMEN_STEPS.map(function (st, i) {
         var val = rec[st.id] || '';
         return '<div class="card examen-step">' +
           '<div class="es-kicker">' + (i + 1) + '. ' + esc(st.kicker) + '</div>' +
           '<div class="q-text" style="margin-top:6px">' + esc(st.q) + '</div>' +
+          (st.hint ? '<div class="small muted" style="margin:6px 0 0">' + esc(st.hint) + '</div>' : '') +
           '<textarea class="reflect" data-examen="' + st.id + '" placeholder="…">' + esc(val) + '</textarea>' +
         '</div>';
       }).join('') +
 
-      '<div class="prayer center">Glory be to the Father, and to the Son, and to the Holy Spirit; as it was in the beginning, is now, and ever shall be, world without end. Amen.</div>' +
+      '<p class="muted small center" style="margin-bottom:-4px">Round it off with the Lord’s Prayer.</p>' +
+      '<div class="prayer center">Our Father, who art in heaven, hallowed be thy name; thy kingdom come, thy will be done, on earth as it is in heaven. Give us this day our daily bread, and forgive us our trespasses, as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil. Amen.</div>' +
 
       '<div class="callout"><span class="co-ico">🌙</span><div class="co-body">' +
         'Your examens are saved privately by date, on this device only. ' +
