@@ -40,11 +40,14 @@
   var ATTN_CONFIG = {
     price: '$9.99',
     freeDays: 3,
-    // Live Gumroad product (created 2026-06-24): "The Attention Examen — 30-Day Workbook", $9.99,
-    // license keys ON. The value below is the product's unique permalink, which Gumroad's license
-    // /verify endpoint matches on (sent as both product_id and product_permalink for safety).
+    // Live Gumroad product (created 2026-06-24): "The Attention Examen — 30-Day Practice", $9.99,
+    // license keys ON. Gumroad's /v2/licenses/verify for this product REQUIRES the real long
+    // product_id below — it rejects the 'movqsc' permalink (whether sent as product_id or as
+    // product_permalink). Verified live 2026-06-29 against a real purchased key. 'movqsc' is just
+    // the store-URL slug; keep gumroadPermalink only as a defensive fallback.
     storeUrl: 'https://seantobin.gumroad.com/l/movqsc',
-    gumroadProductId: 'movqsc'
+    gumroadPermalink: 'movqsc',
+    gumroadProductId: '-oV4kO4BZiAxEcV1xH3olA=='
   };
   var ATTN_UNLOCK_KEY = 'examen_attention_unlocked';
   function attnUnlocked() { return rawGet(ATTN_UNLOCK_KEY) === '1'; }
@@ -1869,7 +1872,7 @@
       var msg = document.getElementById('unlockMsg');
       var code = input ? (input.value || '').trim() : '';
       if (!code) { setUnlockMsg(msg, 'Enter your unlock code first.', true); return; }
-      if (ATTN_CONFIG.gumroadProductId) verifyGumroad(code, msg);   // real license-key check
+      if (ATTN_CONFIG.gumroadProductId || ATTN_CONFIG.gumroadPermalink) verifyGumroad(code, msg);   // real license-key check
       else finishUnlock(validateOfflineCode(code), msg);            // offline fallback until live
       return;
     }
@@ -1890,21 +1893,36 @@
   }
   // Verify a Gumroad license key. Public endpoint, no secret needed; the only
   // network call the app ever makes, and only at unlock time. Reflections never leave.
+  // Gumroad keys this product on the real product_id (verified live 2026-06-29); the permalink
+  // is a defensive fallback only. Try each identifier we have in its OWN request and unlock on
+  // the first {success:true}. The key is trimmed first — receipts wrap it across two lines, so a
+  // copy can pick up stray whitespace.
   function verifyGumroad(key, msg) {
     setUnlockMsg(msg, 'Checking your code…', false);
     if (typeof fetch !== 'function') { setUnlockMsg(msg, 'Can’t verify here — please try again online.', true); return; }
-    var pid = encodeURIComponent(ATTN_CONFIG.gumroadProductId);
-    fetch('https://api.gumroad.com/v2/licenses/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      // send both identifier forms (same value) so verification works regardless of which
-      // parameter Gumroad keys on; increment_uses_count=false so re-checks don't burn uses.
-      body: 'product_id=' + pid + '&product_permalink=' + pid +
-            '&license_key=' + encodeURIComponent(key) +
-            '&increment_uses_count=false'
-    }).then(function (r) { return r.json(); })
-      .then(function (d) { finishUnlock(!!(d && d.success), msg); })
-      .catch(function () { setUnlockMsg(msg, 'Couldn’t reach the store — check your connection and try again.', true); });
+    var lk = encodeURIComponent(String(key || '').trim());
+    var attempts = [];
+    if (ATTN_CONFIG.gumroadProductId) attempts.push('product_id=' + encodeURIComponent(ATTN_CONFIG.gumroadProductId));
+    if (ATTN_CONFIG.gumroadPermalink) attempts.push('product_permalink=' + encodeURIComponent(ATTN_CONFIG.gumroadPermalink));
+    if (!attempts.length) { finishUnlock(false, msg); return; }
+    function tryAt(i, hadNetErr) {
+      if (i >= attempts.length) {
+        if (hadNetErr) setUnlockMsg(msg, 'Couldn’t reach the store — check your connection and try again.', true);
+        else finishUnlock(false, msg);
+        return;
+      }
+      fetch('https://api.gumroad.com/v2/licenses/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: attempts[i] + '&license_key=' + lk + '&increment_uses_count=false'
+      }).then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (d && d.success) { finishUnlock(true, msg); return; }
+          tryAt(i + 1, hadNetErr);            // valid response, not a match — try next identifier
+        })
+        .catch(function () { tryAt(i + 1, true); }); // network/parse error — remember, try next
+    }
+    tryAt(0, false);
   }
 
   /* ----------------------------------------------------------------- INIT */
